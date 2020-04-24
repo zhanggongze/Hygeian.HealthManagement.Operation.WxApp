@@ -65,7 +65,7 @@ export default {
      * 跳转首页
      */
     goIndex() {
-      wx.switchTab({
+      wx.navigateTo({
         url: "/pages/index/main"
       });
     },
