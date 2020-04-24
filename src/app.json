@@ -1,0 +1,62 @@
+{
+  "pages": [
+    "pages/start/main",
+    "pages/login/main",
+    "pages/welcome/main",
+    "pages/index/main",
+    "pages/dossier/main",
+    "pages/newPatient/main",
+    "pages/patientArchiving/main",
+    "pages/consultation/main",
+    "pages/chat/main",
+    "pages/updateDiagnosis/main",
+    "pages/editTag/main",
+    "pages/editRemark/main",
+    "pages/diagnosis/main",
+    "pages/myCode/main",
+    "pages/team/main",
+    "pages/my/main",
+    "pages/patientService/main",
+    "pages/serviceOrder/main",
+    "pages/patientDetail/main",
+    "pages/wxAuth/main",
+    "pages/wxAuthPhone/main",
+    "pages/followUpManager/main",
+    "pages/addAssessment/main",
+    "pages/assessmentDetail/main",
+    "pages/healthDetail/main",
+    "pages/pictureConsultant/main",
+    "pages/pictureChat/main",
+    "pages/servingCustomers/main",
+    "pages/askList/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "医生端",
+    "navigationBarTextStyle": "black"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "请求定位您所在城市"
+    }
+  },
+  "tabBar": {
+    "color": "#8B8FAB",
+    "backgroundColor": "#fff",
+    "selectedColor": "#36507E",
+    "borderStyle": "black",
+
+    "list": [{
+      "text": "首页",
+      "pagePath": "pages/index/main",
+      "iconPath": "static/tabs/tab_index.png",
+      "selectedIconPath": "static/tabs/tab_index_selected.png"
+    }, {
+      "text": "咨询",
+      "pagePath": "pages/consultation/main",
+      "iconPath": "static/tabs/tab_chat.png",
+      "selectedIconPath": "static/tabs/tab_chat_selected.png"
+    }]
+  }
+}

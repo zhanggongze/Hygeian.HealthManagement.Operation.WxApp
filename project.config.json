@@ -1,0 +1,200 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"miniprogramRoot": "dist/wx/",
+	"compileType": "miniprogram",
+	"appid": "wx74b0e2afce9571e3",
+	"projectname": "doctor_hotfix",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 12,
+			"list": [
+				{
+					"id": -1,
+					"name": "首页",
+					"pathName": "pages/index/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "病历夹",
+					"pathName": "pages/dossier/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "新患者",
+					"pathName": "pages/newPatient/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "患者归档",
+					"pathName": "pages/patientArchiving/main",
+					"query": "id= fa5469ab-4877-44cd-9257-a4535b4dd382",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "聊天",
+					"pathName": "pages/chat/main",
+					"query": "id= de315619-4812-4691-a1a0-805d2e5d3677",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "demo",
+					"pathName": "pages/demo/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "诊断",
+					"pathName": "pages/updateDiagnosis/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "编辑标签",
+					"pathName": "pages/editTag/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的二维码",
+					"pathName": "pages/myCode/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的团队",
+					"pathName": "pages/team/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "诊断查询",
+					"pathName": "pages/diagnosis/main",
+					"query": "id= fa5469ab-4877-44cd-9257-a4535b4dd382",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/login/main",
+					"pathName": "pages/login/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 12,
+					"name": "pages/start/main",
+					"pathName": "pages/start/main",
+					"query": "targetUrl=%2Fpages%2FpictureConsultant%2Fmain",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/wxAuth/main",
+					"pathName": "pages/wxAuth/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/followUpManager/main",
+					"pathName": "pages/followUpManager/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/assessmentDetail/main",
+					"pathName": "pages/assessmentDetail/main",
+					"query": "id=cc192f1a-a99c-4d82-9dfd-7e41b255a193",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/addAssessment/main",
+					"pathName": "pages/addAssessment/main",
+					"query": "id=cc192f1a-a99c-4d82-9dfd-7e41b255a193",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/healthDetail/main",
+					"pathName": "pages/healthDetail/main",
+					"query": "id=9ad129f1-7bd2-4fa4-a890-85cea51c209a",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/pictureConsultant/main",
+					"pathName": "pages/pictureConsultant/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 19,
+					"name": "pages/pictureChat/main",
+					"pathName": "pages/pictureChat/main",
+					"query": "consultationID=744faa08-2d67-4b12-a63a-759c38531df6",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/askList/main",
+					"pathName": "pages/askList/main",
+					"query": "healthRecordId= afc5cda9-0416-4e1a-823c-5cd16240142f",
+					"scene": null
+				}
+			]
+		}
+	}
+}
