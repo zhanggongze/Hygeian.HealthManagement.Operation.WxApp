@@ -27,6 +27,7 @@ export default {
     init() {
       if (wx.getStorageSync("token")) {
         this.getCurrentEmployee();
+        this.getHealthRecords()
       } else {
         let _self = this;
         wx.login({
@@ -45,6 +46,7 @@ export default {
                   wx.setStorageSync("refreshToken", res["refreshToken"]);
                   _self.getUserInfo();
                   _self.loginIm(_self);
+                  this.getHealthRecords()
                 },
                 () => {
                   _self.goLogin();
@@ -86,6 +88,22 @@ export default {
           this.goIndex();
         }
       );
+    },
+    getHealthRecords() {
+      this.httpFly.post({
+        skipCount: 0,
+        maxResultCount: 99999
+      }, '/healthRecord/api/v1/partner/queryHealthRecords', res => {
+        if (res && res.items && res.items.length) {
+          wx.setStorageSync('healthRecordsInfo', res.items.reduce((a, b) => {
+            if (!a[b['id']]) {
+              b.age = this.utils.getAge(b['dob'])
+              a[b['id']] = b
+            }
+            return a
+          }, {}))
+        }
+      })
     }
   }
 };

@@ -68,6 +68,61 @@ let MessageEventDict = {
   'Complete': ['本次咨询已结束，感谢您的回复。'],
   'Expired': ['已超过24小时未回复，本次咨询已超时取消。']
 }
+let FamilyRelationsDict = [{
+  key: '本人',
+  value: 'Self'
+}, {
+  key: '配偶',
+  value: 'Spouse'
+}, {
+  key: '儿子',
+  value: 'Son'
+}, {
+  key: '女儿',
+  value: 'Daughter'
+}, {
+  key: '父亲',
+  value: 'Father'
+}, {
+  key: '母亲',
+  value: 'Mother'
+}, {
+  key: '姐妹',
+  value: 'Sister'
+}, {
+  key: '兄弟',
+  value: 'Brother'
+}, {
+  key: '其他',
+  value: 'Other'
+}]
+let ApponitmentStatus = [
+  {
+    key: '待预约',
+    value: '0'
+  }, {
+    key: '已预约',
+    value: '100'
+  }, {
+    key: '已签到',
+    value: '200'
+  }, {
+    key: '已过期',
+    value: '500'
+  }
+]
+let UnitDict = {
+  '0': '日',
+  '10': '次'
+}
+let ServicePackageStatus = {
+  '0': '待确认',
+  '10': '已确认',
+  '20': '进行中',
+  '30': '已取消',
+  '40': '已过期',
+  '50': '已完成'
+}
 export default {
   nameColors,
   professionalDict,
@@ -76,5 +131,9 @@ export default {
   ConsultantProgress,
   MessageType,
   MessageEventDict,
-  AskProgress
+  AskProgress,
+  FamilyRelationsDict,
+  ApponitmentStatus,
+  UnitDict,
+  ServicePackageStatus
 }

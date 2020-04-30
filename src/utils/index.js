@@ -4,6 +4,9 @@ function formatNumber(n) {
 }
 
 export function formatTime(str, type) {
+  if(!str) {
+    return ''
+  }
   let date = new Date(str)
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -97,6 +100,51 @@ export function uuid(len, radix) {
   return uuid.join('')
 }
 
+function formateCity(cityAll) {
+  // 省市区
+  let province = [], city = [], area = []
+  // 格式化后 省市区
+  let fmCity = []
+  for (const key in cityAll) {
+    const element = cityAll[key]
+    // 省
+    if (key == '86') {
+      // 省
+      province.push(element)
+      for (const key in element) {
+        const _element = element[key]
+        let o = {
+          value: key,
+          label: _element,
+          number: key
+        }
+        fmCity.push(o)
+      }
+    } else {
+      // 市
+      fmCity.forEach((item) => {
+        if (key === item.number) {
+          let o
+          item.children = []
+          for (const _city in element) {
+            const _cityName = element[_city]
+            // 市
+            city.push(element)
+            o = {
+              value: _city,
+              label: _cityName,
+              number: _city,
+              isLeaf: true
+            }
+            item.children.push(o)
+          }
+        }
+      })
+    }
+  }
+  return fmCity
+}
+
 export default {
   formatNumber,
   formatTime,
@@ -104,5 +152,6 @@ export default {
   toast,
   getAge,
   timeHandle,
-  uuid
+  uuid,
+  formateCity
 }

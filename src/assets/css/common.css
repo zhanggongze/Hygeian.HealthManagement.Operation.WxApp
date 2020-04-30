@@ -52,10 +52,11 @@ textarea {
 }
 
 .primary-btn {
-  background:linear-gradient(-20deg,rgba(61,90,139,1),rgba(96,129,177,1));
-  border-radius: 50rpx;
+  background:linear-gradient(-45deg,rgba(34,172,251,1),rgba(64,139,241,1));
+  box-shadow: 0 5rpx 16rpx 0 rgba(34, 153, 84, 0.35);
+  border-radius: 44rpx;
   text-align: center;
-  line-height: 100rpx;
+  line-height: 88rpx;
   color: #fff;
   font-size: 32rpx;
 }
@@ -65,7 +66,7 @@ textarea {
 }
 
 .primary-btn-hover {
-  background:linear-gradient(-20deg,rgba(55,81,125,1),rgba(86,116,159,1));
+  /* background:linear-gradient(-20deg,rgba(55,81,125,1),rgba(86,116,159,1)); */
 }
 
 .primary-btn.disable,
