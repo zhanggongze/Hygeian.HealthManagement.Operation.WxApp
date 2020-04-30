@@ -18,19 +18,19 @@
     <div class="content">
       <div class="item">
         <div class="c1">
-          <div class="imgft">
+          <div class="imgft" @click="navtoAppointment()">
             <img src="/static/images/work_subscribe.png" />
             <p>预约管理</p>
           </div>
         </div>
         <div class="c1">
-          <div class="imgft">
+          <div class="imgft" @click="navtoInspection()">
             <img src="/static/images/work_clue.png" />
             <p>检查结果</p>
           </div>
         </div>
         <div class="c1">
-          <div class="imgft">
+          <div class="imgft" @click="navtoCreateRecord()">
             <img src="/static/images/work_agent.png" />
             <p>客户建档</p>
           </div>
@@ -38,7 +38,7 @@
       </div>
       <div class="item">
         <div class="c1">
-          <div class="imgft">
+          <div class="imgft" @click="navtoRecordList()">
             <img src="/static/images/work_agencyfee.png" />
             <p>套餐赠送</p>
           </div>
@@ -86,7 +86,11 @@ export default {
   onLoad(options) {
     Object.assign(this.$data, this.$options.data());
     this.myInfo = wx.getStorageSync("myInfo").servings;
+
     this.activeInfo = this.myInfo[0];
+    wx.setStorageSync("activeInfo", this.activeInfo);
+
+
   },
   onShow() {},
   components: {},
@@ -98,8 +102,31 @@ export default {
       this.isShow = false;
     },
     activeInfoFn(item) {
+      
       this.activeInfo = item;
+      wx.setStorageSync("activeInfo", this.activeInfo );
+
       this.isShow = false;
+    },
+    navtoAppointment() {
+      wx.navigateTo({
+        url: "/pages/appointment/main"
+      });
+    },
+    navtoInspection() {
+      wx.navigateTo({
+        url: "/pages/inspection/main"
+      });
+    },
+    navtoRecordList() {
+      wx.navigateTo({
+        url: "/pages/recordList/main"
+      });
+    },
+    navtoCreateRecord() {
+      wx.navigateTo({
+        url: "/pages/createRecord/main"
+      });
     }
   },
   created() {}
