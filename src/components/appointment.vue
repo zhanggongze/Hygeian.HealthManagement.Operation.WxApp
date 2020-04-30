@@ -4,12 +4,22 @@
       <div class="header">预约</div>
       <div class="main">
         <div class="form">
-          <picker mode="date" :value="date" @change="bindTimeChange">
+          <picker mode="date" :value="date" @change="bindDateChange">
             <div class="form-item">
               <div class="left">
                 <div class="label">预约日期</div>
                 <div class="placeholder" v-if="!date">请选择</div>
                 <div class="value">{{date}}</div>
+              </div>
+              <div class="icon"></div>
+            </div>
+          </picker>
+          <picker mode="time" :value="time" @change="bindTimeChange" end="21:59">
+            <div class="form-item">
+              <div class="left">
+                <div class="label">预约时间</div>
+                <div class="placeholder" v-if="!time">请选择</div>
+                <div class="value">{{time}}</div>
               </div>
               <div class="icon"></div>
             </div>
@@ -46,6 +56,9 @@ export default {
     date: {
       type: String
     },
+    time: {
+      type: String
+    },
     institutation: {
       type: String
     },
@@ -75,7 +88,8 @@ export default {
   methods: {
     getList() {
       this.httpFly.post({
-        contractID: this.contractID
+        contractID: this.contractID,
+        LocationCode: wx.getStorageSync("myInfo").servings[0]['region']
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryReservationLocations', res => {
         this.list = this.list.concat(res.items.map(obj => {
           return {
@@ -85,8 +99,11 @@ export default {
         }))
       })
     },
-    bindTimeChange(e) {
+    bindDateChange(e) {
       this.date = e.mp.detail.value
+    },
+    bindTimeChange(e) {
+      this.time = e.mp.detail.value
     },
     bindPickerChange(e) {
       let index = parseInt(e.mp.detail.value)
@@ -100,6 +117,10 @@ export default {
         this.utils.toast('请选择预约日期')
         return
       }
+      if(!this.time) {
+        this.utils.toast('请选择预约时间')
+        return
+      }
       if(!this.institutation) {
         this.utils.toast('请选择预约机构')
         return
@@ -110,6 +131,7 @@ export default {
       }
       this.$emit('confirm', {
         date: this.date,
+        time: this.time,
         institutation: this.institutation,
         phoneNumber: this.phoneNumber
       })

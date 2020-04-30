@@ -110,7 +110,9 @@ export default {
       // 消费合同ID
       customerContractId: '',
       // 消费合同ItemID
-      customerContractItemId: ''
+      customerContractItemId: '',
+      // 服务项名称
+      name: ''
     };
   },
   onLoad(options) {
@@ -121,6 +123,7 @@ export default {
     this.healthRecordId = options.healthRecordId
     this.customerContractId = options.customerContractId
     this.customerContractItemId = options.customerContractItemId
+    this.name = options.name
     this.queryDoctorInfo()
     this.getDetail()
   },
@@ -265,7 +268,8 @@ export default {
           doctorId: this.doctorId,
           illnessDescribe: this.illnessDescribe,
           imageUrls: this.fileList.map(obj => obj.url),
-          customerId: this.customerId
+          customerId: this.customerId,
+          name: this.name
         },
         "/servicepackage//api/v1/partner/Consult/Ask/Reserve",
         res => {

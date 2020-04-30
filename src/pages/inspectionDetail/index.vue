@@ -2,20 +2,16 @@
   <div class="page-wrap">
     <div class="card-wrap">
       <div class="top">
-        <div class="name">心脑血管一期检查</div>
-        <div class="status">待预约</div>
+        <div class="name">{{name}}</div>
+        <div class="status">{{isFinish ? '已完成' : '进行中'}}</div>
         <div class="info">
-          <div class="label">2020-05-30</div>
-          <div class="label">南昌一脉影像中心</div>
+          <div class="label">{{signedDateTime}}</div>
+          <div class="label">{{reservationLocationName}}</div>
         </div>
-        <div class="package-info">
-          <div class="item">
-            <div class="label">套餐包</div>
-            <div class="value">心血管风险评估包</div>
-          </div>
+        <div class="package-info" v-if="healthRecordInfo">
           <div class="item">
             <div class="label">预约人</div>
-            <div class="value">张三 男 56岁</div>
+            <div class="value">{{healthRecordInfo.name}} {{healthRecordInfo.gender}} {{healthRecordInfo.age}}岁</div>
           </div>
         </div>
       </div>
@@ -23,46 +19,164 @@
         <div class="inspect-project">
           <div class="title">检查项目</div>
           <div class="list">
-            <div class="item">
-              <div class="name">脑血管MR成像</div>
+            <div class="item" v-for="(data, index) in list" :key="index" @click="toDetail(data)">
+              <div class="name">{{data.examinationName ? data.examinationName : ''}}</div>
               <div class="status-icon">
-                <div class="status">未上传</div>
-                <img class="icon" src="/static/images/icon_direct.png" alt="">
-              </div>
-            </div>
-            <div class="item">
-              <div class="name">血常规</div>
-              <div class="status-icon">
-                <div class="status selected">已上传</div>
-                <img class="icon" src="/static/images/icon_direct.png" alt="">
-              </div>
-            </div>
-            <div class="item">
-              <div class="name">心电图</div>
-              <div class="status-icon">
-                <div class="status">未上传</div>
+                <div v-if="data.progress == 400" class="status selected">收集完成</div>
+                <div v-else class="status">收集中</div>
                 <img class="icon" src="/static/images/icon_direct.png" alt="">
               </div>
             </div>
           </div>
         </div>
-        <div class="primary-btn complete-btn">完成</div>
+        <div v-if="!isFinish" class="primary-btn complete-btn" @click="complete">完成</div>
       </div>
     </div>
+    <create-health-event :show="showDialog" @cancel="showDialog=false" @confirm="confirm"></create-health-event>
   </div>
 </template>
 
 <script>
+import createHealthEvent from '@/components/create-health-event'
 export default {
+  components: {
+    createHealthEvent
+  },
   data() {
     return {
-
+      contractID: '',
+      healthRecordId: '',
+      // 检查名称
+      name: '',
+      // 签到时间
+      signedDateTime: '',
+      // 预约地址
+      reservationLocationName: '',
+      // 健康档案信息
+      healthRecordInfo: null,
+      // 预约ID
+      reservationID: '',
+      // 检查项目列表
+      list: [],
+      isFinish: false,
+      showDialog: false,
+      // 检查项ID
+      id: '',
+      progress: ''
     }
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
+    this.contractID = options.contractID
+    this.reservationID = options.reservationID
+    this.getDetail()
   },
   methods: {
+    /**
+     * 获取检查详情
+     */
+    getDetail() {
+      this.list = []
+      this.httpFly.post({
+        contractID: this.contractID,
+        reservationID: this.reservationID
+      }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/GetContract', res => {
+        let contract = res.contract
+        let reservation = res.reservation
+        this.name = contract.contractName
+        this.signedDateTime = this.utils.formatTime(reservation.signedDateTime, 'yyyy-MM-dd')
+        this.reservationLocationName = reservation.reservationLocationName
+        this.healthRecordId = contract.contractHealthRecordId
+        this.list = this.list.concat(res.examinations)
+        this.isFinish = res.contract.isFinish
+        this.getHealthRecord()
+      })
+    },
+    /**
+     * 获取健康档案详情
+     */
+    getHealthRecord() {
+      this.httpFly.post({
+        id: this.healthRecordId
+      }, 'healthrecord/api/v1/partner/getHealthRecord', res => {
+        this.healthRecordInfo = {
+          name: res.name,
+          gender: res.gender,
+          age: new Date().getFullYear() - new Date(res.dob).getFullYear()
+        }
+      })
+    },
+    /**
+     * 完成检查
+     */
+    complete() {
+      this.httpFly.post({
+        contractID: this.contractID
+      }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/FinishContract', res => {
+        this.isFinish = true
+        this.getDetail()
+        let pages = getCurrentPages()
+        // 上一个页面
+        let prevPage = pages[pages.length - 2]
+        // 往上一个页面传递数据，用于刷新上一个页面数据
+        prevPage.setData({
+          needRefresh: true
+        })
+      })
+    },
+    /**
+     * 检查项跳转
+     */
+    toDetail(data) {
+      this.progress = data.progress
+      this.id = data.id
+      if (data.progress == 400) {
+        wx.navigateTo({
+          url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress
+        })
+      } else {
+        this.getHealthEventBySource()
+      }
+    },
+    /**
+     * 判断卫生事件是否存在
+     */
+    getHealthEventBySource() {
+      this.httpFly.post({
+        source: {
+          type: 'Exam',
+          identity: this.id
+        }
+      }, '/healthrecord/api/v1/partner/getHealthEventBySource', res => {
+        this.showDialog = false
+        wx.navigateTo({
+          url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress
+        })
+      }, error => {
+        this.showDialog = true
+      })
+    },
+    /**
+     * 确认创建当前卫生事件
+     */
+    confirm(data) {
+      this.httpFly.post({
+        healthRecordId: this.healthRecordId,
+        occurrenceDateTime: new Date(data.date).toISOString(),
+        institution: this.reservationLocationName,
+        source: {
+          type: 'Exam',
+          identity: this.id
+        },
+        eventType: {
+          code: '123',
+          displayName: '123'
+        }
+      }, 'healthRecord/api/v1/partner/createHealthEvent', res => {
+        this.showDialog = false
+        this.getDetail()
+      })
+    }
   }
 }
 </script>

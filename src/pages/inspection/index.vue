@@ -24,21 +24,22 @@
           @scrolltolower="scrolltolower"
         >
           <div class="list">
-            <div class="item" v-for="(data, index) in list" :key="index">
+            <div class="item" v-for="(data, index) in list" :key="index" @click="toDetail(data)">
               <div class="header">
-                <div class="name">心脑血管一期检查</div>
+                <div class="name">{{data.contract.contractName}}</div>
                 <div class="content">
                   <!-- <div class="label">套餐包：心脑血管风险评估包</div> -->
-                  <div class="label">有效期：2020-05-06至2020-06-05</div>
+                  <div class="label">检查日期：{{data.reservationDateTime}}</div>
+                  <div class="label">检查机构：{{data.reservation.reservationLocationName}}</div>
                 </div>
               </div>
               <div class="footer">
                 <div class="patient-info">
-                  <div class="patient-name">张三</div>
+                  <div class="patient-name">{{data.healthRecordInfo.name}}</div>
                 </div>
                 <div class="gender-age">
-                  <span class="gender">男</span>
-                  <span class="age">6岁</span>
+                  <span class="gender">{{data.healthRecordInfo.gender}}</span>
+                  <span class="age">{{data.healthRecordInfo.age}}岁</span>
                 </div>
               </div>
             </div>
@@ -57,22 +58,22 @@
           @scrolltolower="scrolltolower1"
         >
           <div class="list">
-            <div class="item" v-for="(data, index) in list1" :key="index">
+            <div class="item" v-for="(data, index) in list1" :key="index" @click="toDetail(data)">
               <div class="header">
-                <div class="name">心脑血管一期检查</div>
+                <div class="name">{{data.contract.contractName}}</div>
                 <div class="content">
                   <!-- <div class="label">套餐包：心脑血管风险评估包</div> -->
-                  <div class="label">预约时间：2020-05-06至2020-06-05</div>
-                  <div class="label">预约地点：2020-05-06至2020-06-05</div>
+                  <div class="label">检查日期：{{data.reservationDateTime}}</div>
+                  <div class="label">检查机构：{{data.reservation.reservationLocationName}}</div>
                 </div>
               </div>
               <div class="footer">
                 <div class="patient-info">
-                  <div class="patient-name">张三</div>
+                  <div class="patient-name">{{data.healthRecordInfo.name}}</div>
                 </div>
                 <div class="gender-age">
-                  <span class="gender">男</span>
-                  <span class="age">6岁</span>
+                  <span class="gender">{{data.healthRecordInfo.gender}}</span>
+                  <span class="age">{{data.healthRecordInfo.age}}岁</span>
                 </div>
               </div>
             </div>
@@ -102,19 +103,51 @@ export default {
       totalCount: 0,
       pageIndex1: 0,
       totalCoun1: 0,
-      pageIndex2: 0,
-      totalCount2: 0,
-      list: [1,2,3],
-      list1: []
+      list: [],
+      list1: [],
+      keyword: '',
+      healthRecordsInfo: null,
+      healthRecordIDs: []
     }
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
-    this.init()
+    this.init(() => {
+      this.queryList(0)
+      this.queryList(1)
+    })
+  },
+  onShow() {
+    let pages = getCurrentPages()
+    let curPage = pages[pages.length - 1]
+    if (curPage.data.needRefresh) {
+      delete curPage.data.needRefresh
+      this.init(() => {
+        his.pageIndex = 0
+        this.totalCount = 0
+        this.list = []
+        this.pageIndex1 = 0
+        this.totalCount1 = 0
+        this.list1 = []
+        this.queryList(0)
+        this.queryList(1)
+      })
+    }
   },
   methods: {
-    init() {
+    init(callback) {
+      let index = this.currentIndex
+      if (index === 0) {
+        this.pageIndex = 0
+        this.totalCount = 0
+        this.list = []
+      } else if (index === 1) {
+        this.pageIndex1 = 0
+        this.totalCount1 = 0
+        this.list1 = []
+      }
       this.httpFly.post({
+        name: this.keyword,
         skipCount: 0,
         maxResultCount: 999
       }, '/healthrecord/api/v1/partner/queryHealthRecords', res => {
@@ -127,8 +160,7 @@ export default {
             }
             return a
           }, {})
-          this.queryList()
-          this.queryList(1)
+          callback && callback()
         }
       })
     },
@@ -136,7 +168,7 @@ export default {
      * 上拉加载更多
      */
     scrolltolower() {
-      if (!this.isEmpty && this.list.length < this.totalCount) {
+      if (this.list.length && this.list.length < this.totalCount) {
         this.pageIndex++
         this.queryList()
       }
@@ -145,61 +177,57 @@ export default {
      * 上拉加载更多
      */
     scrolltolower1() {
-      if (!this.isEmpty1 && this.list1.length < this.totalCount1) {
+      if (this.list1.length && this.list1.length < this.totalCount1) {
         this.pageIndex1++
         this.queryList()
       }
     },
     queryList(type) {
       let pageList = [this.pageIndex, this.pageIndex1]
-      let statusList = this.status.map(obj => parseInt(obj.value))
       let processIndex = this.currentIndex
       if (type) {
         processIndex = type
       }
       this.httpFly.post({
-        reservationProgress: statusList[processIndex],
+        reservationProgress: 200,
         healthRecordIDs: this.healthRecordIDs,
         skipCount: pageList[processIndex] * 10,
-        maxResultCount: 10
+        maxResultCount: 10,
+        LocationCode: wx.getStorageSync("myInfo").servings[0]['region'],
+        isFinished: processIndex === 1
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
         this.totalCount = res.totalCount
-        if (res && res.totalCount) {
-          let result = res.items.map(obj => {
-            obj.healthRecordInfo = this.healthRecordsInfo[obj.contract.contractHealthRecordId]
-            obj.contractStartDateTime = this.utils.formate(obj.contract.contractStartDateTime, 'yyyy-MM-dd')
-            obj.contractExpirationDateTime = obj.contract.contractExpirationDateTime === '9999-12-31T23:59:59.9999999+00:00' ? '不限' : this.utils.formate(obj.contract.contractExpirationDateTime, 'yyyy-MM-dd')
-            obj.reservationDateTime = this.utils.formate(obj.reservation.reservationDateTime, 'yyyy-MM-dd')
-            obj.signedDateTime = this.utils.formate(obj.reservation.signedDateTime, 'yyyy-MM-dd')
-            return obj
-          })
-          if (processIndex === 0) {
-            this.totalCount = res.totalCount
-            this.isEmpty = false
-            this.list = this.list.concat(result)
-          } else if (processIndex === 1) {
-            this.totalCount1 = res.totalCount
-            this.isEmpty1 = false
-            this.list1 = this.list1.concat(result)
-          }
-        } else {
-          if (processIndex === 0) {
-            this.isEmpty = true
-          } else if (processIndex === 1) {
-            this.totalCount1 = res.totalCount
-          }
+        let result = res.items.map(obj => {
+          obj.healthRecordInfo = this.healthRecordsInfo[obj.contract.contractHealthRecordId]
+          obj.contractStartDateTime = this.utils.formatTime(obj.contract.contractStartDateTime, 'yyyy-MM-dd')
+          obj.contractExpirationDateTime = obj.contract.contractExpirationDateTime === '9999-12-31T23:59:59.9999999+00:00' ? '不限' : this.utils.formatTime(obj.contract.contractExpirationDateTime, 'yyyy-MM-dd')
+          obj.reservationDateTime = this.utils.formatTime(obj.reservation.reservationDateTime, 'yyyy-MM-dd')
+          obj.signedDateTime = this.utils.formatTime(obj.reservation.signedDateTime, 'yyyy-MM-dd')
+          return obj
+        })
+        if (processIndex === 0) {
+          this.totalCount = res.totalCount
+          this.list = this.list.concat(result)
+        } else if (processIndex === 1) {
+          this.totalCount1 = res.totalCount
+          this.list1 = this.list1.concat(result)
         }
       })
     },
     navClick(data, index) {
       this.currentIndex = index
     },
+    search() {
+      this.init(() => {
+        this.queryList(this.currentIndex)
+      })
+    },
     swiperChange(e) {
       this.currentIndex = e.target.current
     },
     toDetail(data) {
       wx.navigateTo({
-        url: '/pages/appointmentDetail/main?contractID=' + data.contract.contractID + '&reservationID=' + data.reservation.reservationID
+        url: '/pages/inspectionDetail/main?contractID=' + data.contract.contractID + '&reservationID=' + data.reservation.reservationID + '&isFinish=' + this.currentIndex
       })
     }
   }
@@ -237,6 +265,7 @@ export default {
     align-items: center;
     justify-content: space-around;
     height: 100rpx;
+    background-color: #fff;
     .nav-item {
       position: relative;
       padding: 0 15rpx;
