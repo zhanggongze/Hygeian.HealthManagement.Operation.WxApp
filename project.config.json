@@ -55,10 +55,52 @@
 					"scene": null
 				},
 				{
-					"id": 1,
-					"name": "pages/eventTypeList/main",
-					"pathName": "pages/eventTypeList/main",
+					"id": 2,
+					"name": "pages/inspectionDetail/main",
+					"pathName": "pages/inspectionDetail/main",
+					"query": "contractID=d724db42-31b1-4ba8-a72b-5653a15b659a&reservationID=3342e4f5-7b33-4f30-8ab1-6151b8b39ed9",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/createRecord/main",
+					"pathName": "pages/createRecord/main",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "pages/inspectionItemDetail/main",
+					"pathName": "pages/inspectionItemDetail/main",
+					"query": "id=e6cc828d-a43b-4074-afbb-2ba4429f2b4b",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/startServiceList/main",
+					"pathName": "pages/startServiceList/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/healthEvent/main",
+					"pathName": "pages/healthEvent/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/appointment/main",
+					"pathName": "pages/appointment/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/appointmentDetail/main",
+					"pathName": "pages/appointmentDetail/main",
+					"query": "contractID=d724db42-31b1-4ba8-a72b-5653a15b659a&reservationID=3342e4f5-7b33-4f30-8ab1-6151b8b39ed9",
 					"scene": null
 				}
 			]

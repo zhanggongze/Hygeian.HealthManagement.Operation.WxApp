@@ -125,7 +125,7 @@ export default {
       if(this.isConsume) {
         if(this.identity) {
           wx.redirectTo({
-            url: `/pages/illnessDescription/main?doctorID=${this.identity}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}`
+            url: `/pages/illnessDescription/main?doctorID=${this.identity}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&name=${this.serviceName}`
           })
         } else {
           wx.redirectTo({

@@ -23,7 +23,7 @@
       <swiper-item>
         <scroll-view
           style="height: 100%"
-          v-if="!isEmpty"
+          v-if="list.length"
           scroll-y="true"
           @scrolltolower="scrolltolower"
         >
@@ -58,7 +58,7 @@
       <swiper-item>
         <scroll-view
           style="height: 100%"
-          v-if="!isEmpty1"
+          v-if="list1.length"
           scroll-y="true"
           @scrolltolower="scrolltolower1"
         >
@@ -92,7 +92,7 @@
       <swiper-item>
         <scroll-view
           style="height: 100%"
-          v-if="!isEmpty2"
+          v-if="list2.length"
           scroll-y="true"
           @scrolltolower="scrolltolower2"
         >
@@ -126,7 +126,7 @@
       <swiper-item>
         <scroll-view
           style="height: 100%"
-          v-if="!isEmpty3"
+          v-if="list3.length"
           scroll-y="true"
           @scrolltolower="scrolltolower3"
         >
@@ -183,12 +183,17 @@ export default {
       list: [],
       list1: [],
       list2: [],
-      list3: []
+      list3: [],
+      keyword: ''
     }
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
-    this.init()
+    this.init(() => {
+      this.queryList(1)
+      this.queryList(2)
+      this.queryList(3)
+    })
   },
   onShow() {
     let pages = getCurrentPages()
@@ -196,22 +201,41 @@ export default {
     if (curPage.data.needRefresh) {
       delete curPage.data.needRefresh
       this.pageIndex = 0
-      this.pageIndex = 1
-      this.pageIndex = 2
-      this.pageIndex = 3
+      this.pageIndex1 = 0
+      this.pageIndex2 = 0
+      this.pageIndex3 = 0
       this.list = []
       this.list1 = []
       this.list2 = []
       this.list3 = []
-      this.queryList()
+      this.queryList(0)
       this.queryList(1)
       this.queryList(2)
       this.queryList(3)
     }
   },
   methods: {
-    init() {
+    init(callback) {
+      let index = this.currentIndex
+      if (index === 0) {
+        this.pageIndex = 0
+        this.totalCount = 0
+        this.list = []
+      } else if (index === 1) {
+        this.pageIndex1 = 0
+        this.totalCount1 = 0
+        this.list1 = []
+      } else if (index === 2) {
+        this.pageIndex2 = 0
+        this.totalCount2 = 0
+        this.list2 = []
+      } else if (index === 3) {
+        this.pageIndex3 = 0
+        this.totalCount3 = 0
+        this.list3 = []
+      }
       this.httpFly.post({
+        name: this.keyword,
         skipCount: 0,
         maxResultCount: 999
       }, '/healthrecord/api/v1/partner/queryHealthRecords', res => {
@@ -224,10 +248,7 @@ export default {
             }
             return a
           }, {})
-          this.queryList()
-          this.queryList(1)
-          this.queryList(2)
-          this.queryList(3)
+          callback && callback()
         }
       })
     },
@@ -235,7 +256,7 @@ export default {
      * 上拉加载更多
      */
     scrolltolower() {
-      if (!this.isEmpty && this.list.length < this.totalCount) {
+      if (this.list.length && this.list.length < this.totalCount) {
         this.pageIndex++
         this.queryList()
       }
@@ -244,7 +265,7 @@ export default {
      * 上拉加载更多
      */
     scrolltolower1() {
-      if (!this.isEmpty1 && this.list1.length < this.totalCount1) {
+      if (this.list1.length && this.list1.length < this.totalCount1) {
         this.pageIndex1++
         this.queryList()
       }
@@ -253,7 +274,7 @@ export default {
      * 上拉加载更多
      */
     scrolltolower2() {
-      if (!this.isEmpty2 && this.list2.length < this.totalCount2) {
+      if (this.list2.length && this.list2.length < this.totalCount2) {
         this.pageIndex2++
         this.queryList()
       }
@@ -262,7 +283,7 @@ export default {
      * 上拉加载更多
      */
     scrolltolower3() {
-      if (!this.isEmpty3 && this.list3.length < this.totalCount3) {
+      if (this.list3.length && this.list3.length < this.totalCount3) {
         this.pageIndex3++
         this.queryList()
       }
@@ -278,47 +299,52 @@ export default {
         reservationProgress: statusList[processIndex],
         healthRecordIDs: this.healthRecordIDs,
         skipCount: pageList[processIndex] * 10,
-        maxResultCount: 10
+        maxResultCount: 10,
+        locationCode: type === 0 ? 0 : wx.getStorageSync("myInfo").servings[0]['region']
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
-        this.totalCount = res.totalCount
-        if (res && res.totalCount) {
-          let result = res.items.map(obj => {
-            obj.healthRecordInfo = this.healthRecordsInfo[obj.contract.contractHealthRecordId]
-            obj.contractStartDateTime = this.utils.formatTime(obj.contract.contractStartDateTime, 'yyyy-MM-dd')
-            obj.contractExpirationDateTime = obj.contract.contractExpirationDateTime === '9999-12-31T23:59:59.9999999+00:00' ? '不限' : this.utils.formatTime(obj.contract.contractExpirationDateTime, 'yyyy-MM-dd')
-            obj.reservationDateTime = this.utils.formatTime(obj.reservation.reservationDateTime, 'yyyy-MM-dd')
-            obj.signedDateTime = this.utils.formatTime(obj.reservation.signedDateTime, 'yyyy-MM-dd')
-            return obj
-          })
-          if (processIndex === 0) {
-            this.totalCount = res.totalCount
-            this.isEmpty = false
-            this.list = this.list.concat(result)
-          } else if (processIndex === 1) {
-            this.totalCount1 = res.totalCount
-            this.isEmpty1 = false
-            this.list1 = this.list1.concat(result)
-          } else if (processIndex === 2) {
-            this.totalCount2 = res.totalCount
-            this.isEmpty2 = false
-            this.list2 = this.list2.concat(result)
-          } else if (processIndex === 3) {
-            this.totalCount3 = res.totalCount
-            this.isEmpty3 = false
-            this.list3 = this.list3.concat(result)
-          }
-        } else {
-          if (processIndex === 0) {
-            this.isEmpty = true
-          } else if (processIndex === 1) {
-            this.totalCount1 = res.totalCount
-          } else if (processIndex === 2) {
-            this.isEmpty2 = true
-          } else if (processIndex === 3) {
-            this.isEmpty3 = true
-          }
+        let result = res.items.map(obj => {
+          obj.healthRecordInfo = this.healthRecordsInfo[obj.contract.contractHealthRecordId]
+          obj.contractStartDateTime = this.utils.formatTime(obj.contract.contractStartDateTime, 'yyyy-MM-dd')
+          obj.contractExpirationDateTime = obj.contract.contractExpirationDateTime === '9999-12-31T23:59:59.9999999+00:00' ? '不限' : this.utils.formatTime(obj.contract.contractExpirationDateTime, 'yyyy-MM-dd')
+          let time = this.utils.formatTime(obj.reservation.reservationDateTime).substr(11, 5)
+          let hour = parseInt(time.substr(0, 2)) + 2
+          hour = hour < 10 ? '0' + hour : hour
+          let newDateTime = this.utils.formatTime(obj.reservation.reservationDateTime)
+          obj.reservationDateTime = newDateTime.substr(0, 16) + '至' + hour + time.substr(2)
+          obj.signedDateTime = this.utils.formatTime(obj.reservation.signedDateTime, 'yyyy-MM-dd')
+          return obj
+        })
+        if (processIndex === 0) {
+          this.totalCount = res.totalCount
+          this.list = this.list.concat(result)
+        } else if (processIndex === 1) {
+          this.totalCount1 = res.totalCount
+          this.list1 = this.list1.concat(result)
+        } else if (processIndex === 2) {
+          this.totalCount2 = res.totalCount
+          this.list2 = this.list2.concat(result)
+        } else if (processIndex === 3) {
+          this.totalCount3 = res.totalCount
+          this.list3 = this.list3.concat(result)
         }
       })
+    },
+    search() {
+      let index = this.currentIndex
+      if (index === 0) {
+        if (this.keyword) {
+          this.init(() => {
+            this.queryList(0)
+          })
+        } else {
+          this.list = []
+          this.totalCount = 0
+        }
+      } else {
+        this.init(() => {
+          this.queryList(index)
+        })
+      }
     },
     navClick(data, index) {
       this.currentIndex = index

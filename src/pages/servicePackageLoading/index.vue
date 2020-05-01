@@ -169,34 +169,66 @@ export default {
           '10': '次'
         }
         let currentConfig = configList[step]
-        // 如果当前服务提供这必填，并且provider为空
-        if(currentConfig.IsRequiredProvider && !currentConfig.ProviderIdentity) {
-          // 跳转提供者界面
+        if (!currentConfig.ProviderIdentity) {
+          wx.showModal({
+            content: '当前服务没有提供者，是否进行选择?',
+            success (res) {
+              if (res.confirm) {
+                this.handlerProvider()
+              } else {
+                this.handlerBusiness()
+              }
+            }
+          })
+        } else {
+          this.handlerBusiness()
+        }
+      }
+    },
+    handlerProvider() {
+      let unitDict = {
+        '0': '日',
+        '10': '次'
+      }
+      let serviceLoadingConfig = wx.getStorageSync('serviceLoadingConfig')
+      let configList = serviceLoadingConfig.configList
+      let step = serviceLoadingConfig.step
+      let servicePackageId = serviceLoadingConfig.servicePackageId
+      let currentConfig = configList[step]
+      wx.redirectTo({
+        url: `/pages/selectProvider/main?serviceType=${currentConfig.ServiceType}&origian=provider&servicePackageProvider=${servicePackageId}&servicePackageItemProvider=${currentConfig.ItemID}&serviceName=${currentConfig.ServiceName}&serviceCount=${currentConfig.ServiceTotalNumber + unitDict[String(currentConfig.ServiceUnit)]}`
+      })
+    },
+    handlerBusiness() {
+      let unitDict = {
+        '0': '日',
+        '10': '次'
+      }
+      let serviceLoadingConfig = wx.getStorageSync('serviceLoadingConfig')
+      let configList = serviceLoadingConfig.configList
+      let step = serviceLoadingConfig.step
+      let servicePackageId = serviceLoadingConfig.servicePackageId
+      let healthRecordId = serviceLoadingConfig.healthRecordId
+      let currentConfig = configList[step]
+      // 要填写业务表单
+      if(currentConfig.IsRequiredBusinessService && !currentConfig.BusinessServiceID) {
+        if(!currentConfig.BusinessProviderIdentity) {
+          // 跳转到选择服务提供者界面
           wx.redirectTo({
-            url: `/pages/selectProvider/main?serviceType=${currentConfig.ServiceType}&origian=provider&servicePackageProvider=${servicePackageId}&servicePackageItemProvider=${currentConfig.ItemID}&serviceName=${currentConfig.ServiceName}&serviceCount=${currentConfig.ServiceTotalNumber + unitDict[String(currentConfig.ServiceUnit)]}`
+            url: `/pages/selectProvider/main?serviceType=${currentConfig.ServiceType}&origian=businessProvider&servicePackageProvider=${servicePackageId}&servicePackageItemProvider=${currentConfig.ItemID}&serviceName=${currentConfig.ServiceName}&serviceCount=${currentConfig.ServiceTotalNumber + unitDict[String(currentConfig.ServiceUnit)]}`
           })
           return
         }
-        // 要填写业务表单
-        if(currentConfig.IsRequiredBusinessService && !currentConfig.BusinessServiceID) {
-          if(!currentConfig.BusinessProviderIdentity) {
-            // 跳转到选择服务提供者界面
-            wx.redirectTo({
-              url: `/pages/selectProvider/main?serviceType=${currentConfig.ServiceType}&origian=businessProvider&servicePackageProvider=${servicePackageId}&servicePackageItemProvider=${currentConfig.ItemID}&serviceName=${currentConfig.ServiceName}&serviceCount=${currentConfig.ServiceTotalNumber + unitDict[String(currentConfig.ServiceUnit)]}`
-            })
-            return
-          }
-          if(currentConfig.ServiceType === 'ConsultByAsk') {
-             wx.redirectTo({
-              url: `/pages/illnessDescription/main?doctorID=${currentConfig.BusinessProviderIdentity}&showingFee=${currentConfig.showingFee}&sellingFee=${currentConfig.sellingFee}&healthRecordId=${healthRecordId}`
-            })
-          }
-          return
+        if(currentConfig.ServiceType === 'ConsultByAsk') {
+          wx.redirectTo({
+            url: `/pages/illnessDescription/main?doctorID=${currentConfig.BusinessProviderIdentity}&showingFee=${currentConfig.showingFee}&sellingFee=${currentConfig.sellingFee}&healthRecordId=${healthRecordId}&name=${currentConfig.ServiceName}`
+          })
         }
-        serviceLoadingConfig.step = serviceLoadingConfig.step + 1
-        wx.setStorageSync('serviceLoadingConfig', serviceLoadingConfig)
-        this.handleProgress()
+        return
       }
+      serviceLoadingConfig.step = serviceLoadingConfig.step + 1
+      wx.setStorageSync('serviceLoadingConfig', serviceLoadingConfig)
+      this.handleProgress()
     },
     /**
      * 填充业务表单信息

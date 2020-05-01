@@ -3,7 +3,8 @@
     <div class="top">
       <div class="title-status">
         <div class="title">{{name}}</div>
-        <div class="status">收集中</div>
+        <div class="status" v-if="progress == 400">收集完成</div>
+        <div class="status" v-else>收集中</div>
       </div>
       <div class="info">
         <div class="item">
@@ -11,7 +12,7 @@
           <div class="value">
             {{patientName}}
             <span class="gender">{{patientGender}}</span>
-            {{patientAge}}
+            {{patientAge}}岁
           </div>
         </div>
         <div class="item">
@@ -25,7 +26,7 @@
       </div>
     </div>
     <div class="content">
-      <div class="add-btn">+添加检查结果</div>
+      <div class="add-btn" @click="showUpload=true">+添加检查结果</div>
       <div class="file-list">
         <div
           class="file-item"
@@ -38,9 +39,14 @@
           <img v-if="data.fileType === 'dicomurl'" src="/static/images/file_xray.png" alt />
         </div>
       </div>
-      <div class="primary-btn complete-btn">收集完成</div>
+      <div class="primary-btn complete-btn" v-if="progress !== 400" @click="complete">收集完成</div>
     </div>
-    <select-list></select-list>
+    <select-list
+      :show="showUpload"
+      :id="healthRecordId"
+      @cancel="showUpload=false"
+      @confirm="upload"
+    ></select-list>
   </div>
 </template>
 <script>
@@ -52,7 +58,7 @@ export default {
   data() {
     return {
       // 项目名称
-      name: 'xxx',
+      name: '',
       // 检查ID
       id: '',
       // 检查机构
@@ -65,34 +71,39 @@ export default {
       patientGender: '',
       // 患者年龄
       patientAge: '',
-      // 患者关系
-      familyRelation: '',
       // 检查时间
       occurrenceDateTime: '',
       // 检查附件
-      fileList: [{
-        fileType: 'image'
-      }, {
-        fileType: 'pdf'
-      }, {
-        fileType: 'dicomurl'
-      }]
+      fileList: [],
+      contractID: '',
+      progress: '',
+      showUpload: false,
+      // 事件ID
+      healthEventId: ''
     }
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
     this.id = options.id
-    // this.getDetail()
+    this.contractID = options.contractID
+    this.progress = parseInt(options.progress)
+    this.getDetail()
   },
   methods: {
     getDetail() {
-      this.httpFly.post({id: this.id}, '/healthrecord/api/v1/customer/getHealthEvent', res => {
+      this.httpFly.post({
+        source: {
+          type: 'Exam',
+          identity: this.id
+        }
+      }, '/healthrecord/api/v1/partner/getHealthEventBySource', res => {
         this.healthRecordId = res.healthRecordId
+        this.healthEventId = res.id
         this.getRecordDetail()
         this.name = res.eventType.displayName
         this.institution = res.institution
         this.occurrenceDateTime = res.occurrenceDateTime ? this.utils.formatTime(res.occurrenceDateTime, 'yyyy-mm-dd') : ''
-        this.fileList = this.fileList.concat(res.evidences)
+        this.fileList = res.evidences
       })
     },
     /**
@@ -101,12 +112,10 @@ export default {
     getRecordDetail() {
       this.httpFly.post({
         id: this.healthRecordId
-      }, 'healthrecord/api/v1/customer/getHealthRecord', res => {
+      }, 'healthrecord/api/v1/partner/getHealthRecord', res => {
         this.patientName = res.name
         this.patientGender = res.gender
         this.patientAge = this.utils.getAge(res.dob)
-        let familyRelationObj = this.dicts.FamilyRelationsDict.find(item => item.value === res.familyRelation)
-        this.familyRelation = familyRelationObj ? familyRelationObj['key'] : ''
       })
     },
     /**
@@ -122,22 +131,64 @@ export default {
         });
       } else if (fileType === 'pdf') {
         wx.downloadFile({
-          url: fileUrl,
-          success: function (res) {
-            var filePath = res.tempFilePath
-            wx.openDocument({
-              filePath: filePath,
-              success: function (res) {
-                console.log('打开文档成功')
-              }
-            })
-          }
-        })
+          url: fileUrl,
+          success: function (res) {
+            var filePath = res.tempFilePath
+            wx.openDocument({
+              filePath: filePath,
+              success: function (res) {
+                console.log('打开文档成功')
+              }
+            })
+          }
+        })
       } else if (fileType === 'dicomurl') {
         wx.navigateTo({
           url: '/pages/pageview/main?url=' + encodeURIComponent(fileUrl)
         })
       }
+    },
+    /**
+     * 收集完成
+     */
+    complete() {
+      if(!this.fileList.length) {
+        this.utils.toast('请上传检查结果')
+        return
+      } else {
+        let _self = this
+        wx.showModal({
+          content: '确定已收集完成该检查的所有结果？',
+          success (res) {
+            if (res.confirm) {
+              _self.httpFly.post({
+                contractID: _self.contractID,
+                examinationID: _self.id
+              }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/FinishExamination', res => {
+                _self.progress = 400
+              })
+            } 
+          }
+        })
+      }
+      
+    },
+    /**
+     * 文件上传
+     */
+    upload(file) {
+      this.httpFly.post({
+        healthEventId: this.healthEventId,
+        fileType: file.type,
+        fileUrl: file.url,
+        source: {
+          type: 'Exam',
+          identity: this.id
+        }
+      }, 'healthRecord/api/v1/partner/createEvidence', res => {
+        this.showUpload = false
+        this.getDetail()
+      })
     }
   }
 }
@@ -188,10 +239,10 @@ export default {
       }
       .status {
         font-size: 28rpx;
-        color: #408BF1;
+        color: #408bf1;
       }
     }
-    
+
     .info {
       padding: 30rpx 0 10rpx;
       .item {
@@ -232,12 +283,12 @@ export default {
     .add-btn {
       margin: 10rpx 0 30rpx;
       width: 240rpx;
-      border: 1rpx solid #408BF1;
+      border: 1rpx solid #408bf1;
       border-radius: 10rpx;
       line-height: 68rpx;
       text-align: center;
       font-size: 28rpx;
-      color: #408BF1;
+      color: #408bf1;
     }
     .file-list {
       display: flex;

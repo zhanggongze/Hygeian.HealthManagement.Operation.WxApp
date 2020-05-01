@@ -9,14 +9,14 @@
           <div class="btn primary-btn" @click="reserve">预约</div>
         </div>
         <div class="info" v-if="reservationProgress === 100">
-          <div class="label">预约时间：{{reservationDateTime}}</div>
-          <div class="label">预约地点：{{reservationLocationName ? reservationLocationName : ''}}</div>
+          <div class="label">{{reservationDateTime}}</div>
+          <div class="label">{{reservationLocationName ? reservationLocationName : ''}}</div>
           <div v-if="type && type === 'sign'" class="btn primary-btn" @click="sign">签到</div>
           <div v-else class="btn primary-btn" @click="reserve">修改预约</div>
         </div>
         <div class="info" v-if="reservationProgress === 200">
-          <div class="label">签到时间：{{signedDateTime}}</div>
-          <div class="label">签到地点：{{reservationLocationName ? reservationLocationName : ''}}</div>
+          <div class="label">{{signedDateTime}}</div>
+          <div class="label">{{reservationLocationName ? reservationLocationName : ''}}</div>
         </div>
         <div class="info" v-if="reservationProgress === 500">
           <div class="label">过期时间：{{contractExpirationDateTime}}</div>
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <appointment :contractID="contractID" :institutation="reservationLocationID" :date="reservationDateTime" :phoneNumber="reservationPhoneNumber" :show="showAppointmentDialog" @close="showAppointmentDialog=false" @confirm="confirmAppointment"></appointment>
+    <appointment :contractID="contractID" :institutation="reservationLocationID" :date="date" :time="time" :phoneNumber="reservationPhoneNumber" :show="showAppointmentDialog" @close="showAppointmentDialog=false" @confirm="confirmAppointment"></appointment>
   </div>
 </template>
 
@@ -92,7 +92,11 @@ export default {
       // 是否显示弹框
       showAppointmentDialog: false,
       // 类型
-      type: ''
+      type: '',
+      // 预约日期
+      date: '',
+      // 预约时间
+      time: ''
     }
   },
   onLoad(options) {
@@ -119,7 +123,12 @@ export default {
         this.reservationProgressTxt = this.dict.ApponitmentStatus.find(obj => obj.value === String(this.reservationProgress))['key']
         this.contractStartDateTime = this.utils.formatTime(contract.contractStartDateTime, 'yyyy-MM-dd')
         this.contractExpirationDateTime = contract.contractExpirationDateTime === '9999-12-31T23:59:59.9999999+00:00' ? '不限' : this.utils.formatTime(contract.contractExpirationDateTime, 'yyyy-MM-dd')
-        this.reservationDateTime = this.utils.formatTime(reservation.reservationDateTime, 'yyyy-MM-dd')
+        this.date = this.utils.formatTime(reservation.reservationDateTime, 'yyyy-MM-dd')
+        this.time = this.utils.formatTime(reservation.reservationDateTime).substr(11, 5)
+        let hour = parseInt(this.time.substr(0, 2)) + 2
+        hour = hour < 10 ? '0' + hour : hour
+        let newDateTime = this.utils.formatTime(reservation.reservationDateTime)
+        this.reservationDateTime = newDateTime.substr(0, 16) + '至' + hour + this.time.substr(2)
         this.signedDateTime = this.utils.formatTime(reservation.signedDateTime, 'yyyy-MM-dd')
         this.reservationLocationName = reservation.reservationLocationName
         this.reservationLocationID = reservation.reservationLocationID
@@ -158,7 +167,7 @@ export default {
       this.httpFly.post({
         contractID: this.contractID,
         reservationID: this.reservationID,
-        reservationDateTime: new Date(data.date).toISOString(),
+        reservationDateTime: new Date(data.date + ' ' + data.time + ':00').toISOString(),
         reservationLocationID: data.institutation,
         phoneNumber: data.phoneNumber
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/MakeReservation', res => {
