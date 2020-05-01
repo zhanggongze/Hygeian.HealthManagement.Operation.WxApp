@@ -74,7 +74,7 @@ export default {
   components: {},
   methods: {
     create() {
-      
+      // 校验
       if (this.pickDate === "请选择附件时间") {
         this.msg("附件时间不能为空！");
         return;
