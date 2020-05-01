@@ -46,7 +46,22 @@
 		},
 		"miniprogram": {
 			"current": 12,
-			"list": []
+			"list": [
+				{
+					"id": -1,
+					"name": "pages/createArchived/main",
+					"pathName": "pages/createArchived/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "pages/eventTypeList/main",
+					"pathName": "pages/eventTypeList/main",
+					"query": "",
+					"scene": null
+				}
+			]
 		}
 	}
 }

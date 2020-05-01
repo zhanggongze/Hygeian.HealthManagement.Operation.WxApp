@@ -1,0 +1,47 @@
+.triangleDiv {
+    border-color: #333333 #fff #fff #fff;
+    border-style: solid;
+    border-width: 8px 8px 0 8px;
+    height      : 0;
+    width       : 0;
+    display     : inline-block;
+}
+
+.hjPage {
+    .hjform {
+        .item {
+            color        : #333333;
+            display      : flex;
+            border-bottom: 1px solid rgba(225, 225, 225, 1);
+            padding      : 35rpx;
+
+            .d1 {
+                width  : 140rpx;
+                // flex: 1;
+            }
+
+            .d2 {
+                flex: 2;
+            }
+
+            .d3 {
+                flex      : 1;
+                text-align: right;
+            }
+        }
+
+    }
+}
+
+.btn {
+    margin-top: 120rpx;
+    width        : 320rpx;
+    height       : 88rpx;
+    background   : linear-gradient(-45deg, rgba(34, 172, 251, 1), rgba(64, 139, 241, 1));
+    box-shadow   : 3px 4px 16px 0px rgba(116, 116, 116, 0.35);
+    border-radius: 44px;
+    color: #fff;
+    &:active{
+        background   : linear-gradient(-45deg, rgb(30, 151, 221), rgb(59, 125, 218));
+    }
+}

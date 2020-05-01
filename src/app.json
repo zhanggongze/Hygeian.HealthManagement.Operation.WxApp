@@ -22,7 +22,9 @@
     "pages/startServiceList/main",
     "pages/healthEvent/main",
     "pages/appointment/main",
-    "pages/appointmentDetail/main"
+    "pages/appointmentDetail/main",
+    "pages/eventTypeList/main",
+    "pages/createArchived/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
