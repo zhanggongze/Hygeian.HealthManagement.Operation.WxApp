@@ -3,7 +3,8 @@
     <div class="hjform">
       <div class="item">
         <div class="d1">
-          <span>*</span><p>附件时间</p>
+          <span>*</span>
+          <p>附件时间</p>
         </div>
         <div class="d2">
           <picker
@@ -24,7 +25,8 @@
       </div>
       <div class="item" @click="navtoEventTypeList()">
         <div class="d1">
-          <span>*</span><p>事件类型</p>
+          <span>*</span>
+          <p>事件类型</p>
         </div>
         <div class="d2">
           <p v-if="codeId">{{codeName}}</p>
@@ -37,7 +39,8 @@
       </div>
       <div class="item">
         <div class="d1">
-          <span>*</span><p>机构</p>
+          <span>*</span>
+          <p>机构</p>
         </div>
         <div class="d2">
           <input v-model="institution" type="text" placeholder="请填写机构名称" />
@@ -86,12 +89,12 @@ export default {
         return;
       }
 
-      //todo
+      // 创建卫生事件
       let reqData = {
         healthRecordId: this.healthRecordId,
         occurrenceDateTime: this.pickDate,
         eventType: { code: this.codeId, displayName: this.codeName },
-        institution: this.institution,
+        institution: this.institution
       };
       this.httpFly.post(
         reqData,
