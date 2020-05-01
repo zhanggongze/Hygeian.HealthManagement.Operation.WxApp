@@ -3,7 +3,7 @@
     <div class="hjform">
       <div class="item">
         <div class="d1">
-          <p>附件时间</p>
+          <span>*</span><p>附件时间</p>
         </div>
         <div class="d2">
           <picker
@@ -24,7 +24,7 @@
       </div>
       <div class="item" @click="navtoEventTypeList()">
         <div class="d1">
-          <p>事件类型</p>
+          <span>*</span><p>事件类型</p>
         </div>
         <div class="d2">
           <p v-if="codeId">{{codeName}}</p>
@@ -37,7 +37,7 @@
       </div>
       <div class="item">
         <div class="d1">
-          <p>机构</p>
+          <span>*</span><p>机构</p>
         </div>
         <div class="d2">
           <input v-model="institution" type="text" placeholder="请填写机构名称" />
@@ -74,32 +74,43 @@ export default {
   components: {},
   methods: {
     create() {
+      
+      if (this.pickDate === "请选择附件时间") {
+        this.msg("附件时间不能为空！");
+        return;
+      } else if (!this.codeId) {
+        this.msg("事件不能为空！");
+        return;
+      } else if (!this.institution) {
+        this.msg("机构不能为空！");
+        return;
+      }
+
       //todo
       let reqData = {
         healthRecordId: this.healthRecordId,
         occurrenceDateTime: this.pickDate,
         eventType: { code: this.codeId, displayName: this.codeName },
         institution: this.institution,
-        source: {
-          type: "string",
-          identity: "string"
-        }
       };
       this.httpFly.post(
         reqData,
         "/healthrecord/api/v1/partner/createHealthEvent",
         res => {
-          wx.showToast({
-            title: "创建成功！",
-            icon: "none",
-            duration: 1500,
-            mask: false
-          });
+          this.msg("创建成功！");
           wx.navigateBack({
             delta: 1
           });
         }
       );
+    },
+    msg(msg) {
+      wx.showToast({
+        title: msg,
+        icon: "none",
+        duration: 1500,
+        mask: false
+      });
     },
     bindDateChangeStart(e) {
       console.log(e);

@@ -16,8 +16,13 @@
             padding      : 35rpx;
 
             .d1 {
-                width  : 140rpx;
+                width  : 160rpx;
                 // flex: 1;
+                span{
+                    color: #f00;
+                    float: left;
+                    padding-right: 6rpx;
+                }
             }
 
             .d2 {
