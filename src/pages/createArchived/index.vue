@@ -88,6 +88,12 @@ export default {
         reqData,
         "/healthrecord/api/v1/partner/createHealthEvent",
         res => {
+          wx.showToast({
+            title: "创建成功！",
+            icon: "none",
+            duration: 1500,
+            mask: false
+          });
           wx.navigateBack({
             delta: 1
           });
