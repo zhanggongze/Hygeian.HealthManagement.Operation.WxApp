@@ -26,7 +26,8 @@ export default {
      */
     init() {
       if (wx.getStorageSync("token")) {
-        this.getCurrentEmployee();
+        this.getCurrentEmployee()
+        this.loginIm(this)
         this.getHealthRecords()
       } else {
         let _self = this;
@@ -44,7 +45,7 @@ export default {
                 res => {
                   wx.setStorageSync("token", "Bearer " + res["accessToken"]);
                   wx.setStorageSync("refreshToken", res["refreshToken"]);
-                  _self.getUserInfo();
+                  this.getCurrentEmployee()
                   _self.loginIm(_self);
                   this.getHealthRecords()
                 },
@@ -62,7 +63,11 @@ export default {
         });
       }
     },
-
+    loginIm(_self) {
+      wx.reLaunch({
+        url: '/pages/index/main'
+      })
+    },
     /**
      * 跳转首页
      */
@@ -85,7 +90,7 @@ export default {
         "/organization/api/v1/partner/getCurrentEmployee",
         res => {
           wx.setStorageSync("myInfo", res);
-          this.goIndex();
+          // this.goIndex();
         }
       );
     },

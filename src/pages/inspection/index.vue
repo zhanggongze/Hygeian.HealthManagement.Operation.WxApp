@@ -193,7 +193,7 @@ export default {
         healthRecordIDs: this.healthRecordIDs,
         skipCount: pageList[processIndex] * 10,
         maxResultCount: 10,
-        LocationCode: wx.getStorageSync("myInfo").servings[0]['region'],
+        LocationCode: wx.getStorageSync("activeInfo")['region'],
         isFinished: processIndex === 1
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
         this.totalCount = res.totalCount

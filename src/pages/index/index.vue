@@ -38,13 +38,23 @@
       </div>
       <div class="item">
         <div class="c1">
-          <div class="imgft" @click="navtoRecordList()">
+          <div class="imgft" @click="navtoRecordList('servicePackage')">
             <img src="/static/images/work_agencyfee.png" />
             <p>套餐赠送</p>
           </div>
         </div>
-        <div class="c1"></div>
-        <div class="c1"></div>
+        <div class="c1">
+          <div class="imgft" @click="navtoRecordList('healthEvent')">
+            <img src="/static/images/work_agencyfee.png" />
+            <p>附件归档</p>
+          </div>
+        </div>
+        <div class="c1">
+          <div class="imgft" @click="navtoStartServiceList()">
+            <img src="/static/images/work_agencyfee.png" />
+            <p>待发起的服务</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -118,15 +128,20 @@ export default {
         url: "/pages/inspection/main"
       });
     },
-    navtoRecordList() {
+    navtoRecordList(type) {
       wx.navigateTo({
-        url: "/pages/recordList/main"
+        url: "/pages/recordList/main?useType=" + type
       });
     },
     navtoCreateRecord() {
       wx.navigateTo({
         url: "/pages/createRecord/main"
       });
+    },
+    navtoStartServiceList() {
+      wx.navigateTo({
+        url: '/pages/startServiceList/main'
+      })
     }
   },
   created() {}

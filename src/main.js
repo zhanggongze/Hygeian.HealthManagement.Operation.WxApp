@@ -160,7 +160,7 @@ function onReadyStateUpdate({ name }) {
           })
         }
       } else {
-        wx.switchTab({
+        wx.reLaunch({
           url: '/pages/index/main'
         })
       }

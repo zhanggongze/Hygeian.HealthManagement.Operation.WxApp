@@ -89,7 +89,7 @@ export default {
     getList() {
       this.httpFly.post({
         contractID: this.contractID,
-        LocationCode: wx.getStorageSync("myInfo").servings[0]['region']
+        LocationCode: wx.getStorageSync('activeInfo')['region']
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryReservationLocations', res => {
         this.list = this.list.concat(res.items.map(obj => {
           return {

@@ -300,7 +300,7 @@ export default {
         healthRecordIDs: this.healthRecordIDs,
         skipCount: pageList[processIndex] * 10,
         maxResultCount: 10,
-        locationCode: type === 0 ? 0 : wx.getStorageSync("myInfo").servings[0]['region']
+        locationCode: type === 0 ? 0 : wx.getStorageSync("activeInfo")['region']
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
         let result = res.items.map(obj => {
           obj.healthRecordInfo = this.healthRecordsInfo[obj.contract.contractHealthRecordId]

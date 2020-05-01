@@ -43,7 +43,7 @@ export default {
       this.httpFly.post({
         skipCount: (this.pageIndex - 1) * 20,
         maxResultCount: 10,
-        partnerId: wx.getStorageSync("myInfo").servings[0]['partnerId'],
+        partnerId: wx.getStorageSync("activeInfo")['partnerId'],
         name: this.name,
         statuses: [10],
         minSellingFee: 0,
