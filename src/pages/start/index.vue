@@ -27,7 +27,7 @@ export default {
     init() {
       if (wx.getStorageSync("token")) {
         this.getCurrentEmployee()
-        this.loginIm(this)
+        // this.loginIm(this)
         this.getHealthRecords()
       } else {
         let _self = this;
@@ -46,7 +46,6 @@ export default {
                   wx.setStorageSync("token", "Bearer " + res["accessToken"]);
                   wx.setStorageSync("refreshToken", res["refreshToken"]);
                   _self.getCurrentEmployee()
-                  _self.loginIm(_self);
                   _self.getHealthRecords()
                 },
                 () => {
@@ -90,7 +89,7 @@ export default {
         "/organization/api/v1/partner/getCurrentEmployee",
         res => {
           wx.setStorageSync("myInfo", res);
-          // this.goIndex();
+          this.goIndex();
         }
       );
     },
