@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrap">
     <div class="list">
-      <div class="item" v-for="(data, index) in list" :key="index">
+      <div class="item" v-for="(data, index) in list" :key="index" @click="toDetail(data)">
         <div class="info">
           <div class="name">{{data.eventType.displayName}}</div>
           <div class="content">
@@ -56,6 +56,14 @@ export default {
     createHealthEvent() {
       wx.navigateTo({
         url: '/pages/createArchived/main?healthRecordId=' + this.healthRecordId
+      })
+    },
+    /**
+     * 跳转到上传附件界面
+     */
+    toDetail(data) {
+      wx.navigateTo({
+        url: '/pages/inspectionItemDetail/main?id=' + data.id
       })
     }
   }

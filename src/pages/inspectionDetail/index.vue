@@ -62,7 +62,9 @@ export default {
       showDialog: false,
       // 检查项ID
       id: '',
-      progress: ''
+      progress: '',
+      eventTypeCode: '',
+      eventTypeName: ''
     }
   },
   onLoad(options) {
@@ -130,6 +132,8 @@ export default {
     toDetail(data) {
       this.progress = data.progress
       this.id = data.id
+      this.eventTypeCode = data.eventType.code
+      this.eventTypeName = data.eventType.displayName
       if (data.progress == 400) {
         wx.navigateTo({
           url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress
@@ -169,12 +173,15 @@ export default {
           identity: this.id
         },
         eventType: {
-          code: '123',
-          displayName: '123'
+          code: this.eventTypeCode,
+          displayName: this.eventTypeName
         }
       }, 'healthRecord/api/v1/partner/createHealthEvent', res => {
         this.showDialog = false
         this.getDetail()
+        wx.navigateTo({
+          url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress
+        })
       })
     }
   }
