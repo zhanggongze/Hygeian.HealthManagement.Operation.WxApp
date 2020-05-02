@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="primary-btn add-btn">创建新的归档事件</div>
+    <div class="primary-btn add-btn" @click="createHealthEvent">创建新的归档事件</div>
   </div>
 </template>
 <script>
@@ -30,7 +30,13 @@ export default {
     this.queryHealthEvents()
   },
   onShow() {
-
+    let pages = getCurrentPages();
+    // 上一个页面
+    let curPage = pages[pages.length - 1]
+    if(curPage.data.needRefresh) {
+      delete curPage.data.needRefresh
+      this.queryHealthEvents()
+    }
   },
   methods: {
     /**
@@ -45,6 +51,11 @@ export default {
           obj.occurrenceDateTime = this.utils.formatTime(obj.occurrenceDateTime, 'yyyy-mm-dd')
           return obj
         }))
+      })
+    },
+    createHealthEvent() {
+      wx.navigateTo({
+        url: '/pages/createArchived/main?healthRecordId=' + this.healthRecordId
       })
     }
   }

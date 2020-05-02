@@ -123,7 +123,7 @@ export default {
     if (curPage.data.needRefresh) {
       delete curPage.data.needRefresh
       this.init(() => {
-        his.pageIndex = 0
+        this.pageIndex = 0
         this.totalCount = 0
         this.list = []
         this.pageIndex1 = 0
@@ -194,7 +194,7 @@ export default {
         skipCount: pageList[processIndex] * 10,
         maxResultCount: 10,
         LocationCode: wx.getStorageSync("activeInfo")['region'],
-        isFinished: processIndex === 1
+        isFinished: processIndex === 1 ? true : null
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
         this.totalCount = res.totalCount
         let result = res.items.map(obj => {

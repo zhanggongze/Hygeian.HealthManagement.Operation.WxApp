@@ -7,20 +7,29 @@
     <div class="doctor-list" v-if="list && list.length">
       <scroll-view class="list" scroll-y="true" @scrolltolower="scrolltolower">
         <div class="item" v-for="(data, index) in list" :key="index" @click="selectProvider(data)">
-          <div class="doctor-info">
-            <img class="doctor-img" :src="data.headImageUrl" />
-            <div class="base-info">
-              <div class="name-prefessional">
-                <div class="name">{{data.name}}</div>
-                <div class="prefessional">{{data.professionalTitle}}</div>
-              </div>
-              <div class="hospital-depart">
-                <div class="hospital">{{data.hospitalName}}</div>
-                <div class="depart">{{data.departmentName}}</div>
-              </div>
-            </div>            
+          <div v-if="serviceType === 'ConsultByAsk' || serviceType === 'IM'">
+            <div class="doctor-info">
+              <img class="doctor-img" :src="data.headImageUrl" />
+              <div class="base-info">
+                <div class="name-prefessional">
+                  <div class="name">{{data.name}}</div>
+                  <div class="prefessional">{{data.professionalTitle}}</div>
+                </div>
+                <div class="hospital-depart">
+                  <div class="hospital">{{data.hospitalName}}</div>
+                  <div class="depart">{{data.departmentName}}</div>
+                </div>
+              </div>            
+            </div>
+            <div class="good-at line-clamp2">擅长：{{data.skilful}}</div>
           </div>
-          <div class="good-at line-clamp2">擅长：{{data.skilful}}</div>
+          <div class="institution-info" v-else>
+            <div class="name">
+              <img class="img" src="/static/images/service_hospital.png" alt="" srcset="">
+              <div>{{data.name}}</div>
+            </div>
+            <div class="address">地址：{{data.address}}</div>
+          </div>
         </div>
       </scroll-view>
     </div>    
@@ -75,7 +84,7 @@ export default {
       this.providerType = 'Doctor'
       this.getDoctorList()
     } else {
-      this.serviceType = 'Institution'
+      this.providerType = 'ReservationLocation'
       this.getInstitutionsList()
     }
   },
@@ -108,26 +117,32 @@ export default {
       })
     },
     getInstitutionsList() {
-      let queryString = `servicePackageProvider:"${this.servicePackageProvider}",servicePackageItemProvider:"${this.servicePackageItemProvider}"`
-      let queryStringPage = queryString + `,offset:${this.pageIndex*10},limit:10`
+      // let queryString = `servicePackageProvider:"${this.servicePackageProvider}",servicePackageItemProvider:"${this.servicePackageItemProvider}"`
+      // let queryStringPage = queryString + `,offset:${this.pageIndex*10},limit:10`
+      // this.httpFly.post({
+      //   query: `query{
+      //     institutions(${queryStringPage}) {
+      //       id,
+      //       fullName,
+      //       address
+      //     }
+      //     institutionsCount(${queryString})
+      //   }`
+      // }, '/medicalgroup/api/graphql', res => {
+      //   if(res && res.data && res.data.institutions) {
+      //     let list = res.data.institutions.map(obj => {
+      //       obj.name = obj.fullName
+      //       return obj
+      //     })
+      //     this.list = this.list.concat(list)
+      //     this.totalCount = res.data.institutionsCount
+      //   }
+      // })
       this.httpFly.post({
-        query: `query{
-          institutions(${queryStringPage}) {
-            id,
-            fullName,
-            address
-          }
-          institutionsCount(${queryString})
-        }`
-      }, '/medicalgroup/api/graphql', res => {
-        if(res && res.data && res.data.institutions) {
-          let list = res.data.institutions.map(obj => {
-            obj.name = obj.fullName
-            return obj
-          })
-          this.list = this.list.concat(list)
-          this.totalCount = res.data.institutionsCount
-        }
+        servicePackageItemID: this.servicePackageItemProvider
+      }, '/servicepackage/api/v1/partner/ServicePackages/QueryReservationLocations', res => {
+        this.list = this.list.concat(res.items)
+        this.totalCount = res.length
       })
     },
     /**
@@ -138,7 +153,7 @@ export default {
         this.pageIndex++
         if(this.providerType === 'Doctor') {
           this.getDoctorList()
-        } else if (his.providerType === 'Institution') {
+        } else if (this.providerType === 'Institution') {
           this.getInstitutionsList()
         }
       }
@@ -240,6 +255,26 @@ export default {
         }
         .good-at {
           margin-top: 24rpx;
+        }
+        .institution-info {
+          .name {
+            display: flex;
+            align-items: center;
+            font-size: 32rpx;
+            font-weight: 700;;
+            color: #333;
+            .img {
+              display: block;
+              margin-right: 10rpx;
+              width: 48rpx;
+              height: 48rpx;
+            }
+          }
+          .address {
+            margin-top: 20rpx;
+            font-size: 28rpx;
+            color: #999;
+          }
         }
       }
     }

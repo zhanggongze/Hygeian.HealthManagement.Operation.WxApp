@@ -119,7 +119,7 @@ export default {
       let servicePackageId = serviceLoadingConfig.servicePackageId
       let healthRecordId = serviceLoadingConfig.healthRecordId
       if(configList.length === step) {
-        let designatedProviders = configList.filter(obj => obj.IsRequiredProvider).map(obj => {
+        let designatedProviders = configList.filter(obj => obj.IsRequiredProvider && obj.ProviderIdentity).map(obj => {
           return {
             servicePackageItemId: obj.ItemID,
             provider: {
@@ -142,14 +142,16 @@ export default {
             }
           }
         })
-        let targetItemID = targetUrl.split('&').length > 1 ? targetUrl.split('&')[1].match(/{(\S*)\./)[1] : targetUrl.match(/{(\S*)\./)[1]
-        if(configList && configList.find(obj => obj.ItemID === targetItemID)) {
-          let info = configList.find(obj => obj.ItemID === targetItemID)
-          targetUrl = targetUrl
-                            .replace(`{${targetItemID}.consultationId}`, info.BusinessServiceID)
-                            .replace(`{${targetItemID}.healthRecordId}`, healthRecordId)
-                            .replace(`{${targetItemID}.recipientType}`, info.ProviderType)
-                            .replace(`{${targetItemID}.recipientIdentity}`, info.ProviderIdentity)
+        if (targetUrl) {
+          let targetItemID = targetUrl.split('&').length > 1 ? targetUrl.split('&')[1].match(/{(\S*)\./)[1] : targetUrl.match(/{(\S*)\./)[1]
+          if(configList && configList.find(obj => obj.ItemID === targetItemID)) {
+            let info = configList.find(obj => obj.ItemID === targetItemID)
+            targetUrl = targetUrl
+                              .replace(`{${targetItemID}.consultationId}`, info.BusinessServiceID)
+                              .replace(`{${targetItemID}.healthRecordId}`, healthRecordId)
+                              .replace(`{${targetItemID}.recipientType}`, info.ProviderType)
+                              .replace(`{${targetItemID}.recipientIdentity}`, info.ProviderIdentity)
+          }
         }
         wx.removeStorageSync('serviceLoadingConfig')
         wx.setStorageSync('contractParam', {
@@ -169,17 +171,22 @@ export default {
           '10': '次'
         }
         let currentConfig = configList[step]
+        let _self = this
         if (!currentConfig.ProviderIdentity) {
-          wx.showModal({
-            content: '当前服务没有提供者，是否进行选择?',
-            success (res) {
-              if (res.confirm) {
-                this.handlerProvider()
-              } else {
-                this.handlerBusiness()
+          if (currentConfig.IsRequiredProvider) {
+            this.handlerProvider()
+          } else {
+            wx.showModal({
+              content: '当前服务没有提供者，是否进行选择?',
+              success (res) {
+                if (res.confirm) {
+                  _self.handlerProvider()
+                } else {
+                  _self.handlerBusiness()
+                }
               }
-            }
-          })
+            })
+          }
         } else {
           this.handlerBusiness()
         }

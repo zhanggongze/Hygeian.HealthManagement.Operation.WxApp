@@ -65,6 +65,7 @@ export default {
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data());
+    this.healthRecordId = options.healthRecordId
   },
   onShow() {
     let pages = getCurrentPages();
@@ -100,7 +101,12 @@ export default {
         reqData,
         "/healthrecord/api/v1/partner/createHealthEvent",
         res => {
-          this.msg("创建成功！");
+          this.utils.toast('创建成功')
+          let pages = getCurrentPages();
+          let prePage = pages[pages.length - 2]
+          prevPage.setData({
+            needRefresh: true
+          })
           wx.navigateBack({
             delta: 1
           });
