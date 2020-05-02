@@ -45,9 +45,9 @@ export default {
                 res => {
                   wx.setStorageSync("token", "Bearer " + res["accessToken"]);
                   wx.setStorageSync("refreshToken", res["refreshToken"]);
-                  this.getCurrentEmployee()
+                  _self.getCurrentEmployee()
                   _self.loginIm(_self);
-                  this.getHealthRecords()
+                  _self.getHealthRecords()
                 },
                 () => {
                   _self.goLogin();
