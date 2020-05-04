@@ -102,6 +102,12 @@
 					"pathName": "pages/appointmentDetail/main",
 					"query": "contractID=d724db42-31b1-4ba8-a72b-5653a15b659a&reservationID=3342e4f5-7b33-4f30-8ab1-6151b8b39ed9",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/dicomList/main",
+					"pathName": "pages/dicomList/main",
+					"scene": null
 				}
 			]
 		}

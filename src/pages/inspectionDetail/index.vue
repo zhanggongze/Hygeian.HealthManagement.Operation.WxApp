@@ -71,6 +71,7 @@ export default {
     Object.assign(this.$data, this.$options.data())
     this.contractID = options.contractID
     this.reservationID = options.reservationID
+    
     this.getDetail()
   },
   methods: {

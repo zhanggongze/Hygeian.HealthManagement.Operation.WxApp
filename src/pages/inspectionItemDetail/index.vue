@@ -39,7 +39,8 @@
           <img v-if="data.fileType === 'dicomurl'" src="/static/images/file_xray.png" alt />
         </div>
       </div>
-      <div class="primary-btn complete-btn" v-if="progress !== 400" @click="complete">收集完成</div>
+      <div class="primary-btn complete-btn" v-if="progress !== 400 && type !== 'archive'" @click="complete">收集完成</div>
+      <div class="primary-btn complete-btn" v-if="type ==='archive'" @click="sendMessage">推送通知</div>
     </div>
     <select-list
       :show="showUpload"
@@ -61,6 +62,8 @@ export default {
       name: '',
       // 检查ID
       id: '',
+      // 卫生事件ID
+      healthEventId: '',
       // 检查机构
       institution: '',
       // 健康档案ID
@@ -79,7 +82,8 @@ export default {
       progress: '',
       showUpload: false,
       // 事件ID
-      healthEventId: ''
+      healthEventId: '',
+      type: ''
     }
   },
   onLoad(options) {
@@ -87,9 +91,41 @@ export default {
     this.id = options.id
     this.contractID = options.contractID
     this.progress = parseInt(options.progress)
-    this.getDetail()
+    this.type = options.type
+    this.healthEventId = options.healthEventId
+    if(this.healthEventId) {
+      this.getHealthEvent()
+    } else {
+      this.getDetail()
+    }
+  },
+  onShow() {
+    let pages = getCurrentPages();
+    // 上一个页面
+    let curPage = pages[pages.length - 1]
+    if(curPage.data.dicomUrl) {
+      let dicomUrl = curPage.data.dicomUrl
+      delete curPage.data.dicomUrl
+      this.upload({
+        type: 'dicomurl',
+        url: dicomUrl
+      })
+    }
   },
   methods: {
+    getHealthEvent() {
+      this.httpFly.post({
+        id: this.healthEventId
+      }, '/healthrecord/api/v1/partner/getHealthEvent', res => {
+        this.healthRecordId = res.healthRecordId
+        this.healthEventId = res.id
+        this.getRecordDetail()
+        this.name = res.eventType.displayName
+        this.institution = res.institution
+        this.occurrenceDateTime = res.occurrenceDateTime ? this.utils.formatTime(res.occurrenceDateTime, 'yyyy-mm-dd') : ''
+        this.fileList = res.evidences
+      })
+    },
     getDetail() {
       this.httpFly.post({
         source: {
@@ -188,6 +224,16 @@ export default {
       }, 'healthRecord/api/v1/partner/createEvidence', res => {
         this.showUpload = false
         this.getDetail()
+      })
+    },
+    /**
+     * 推送通知
+     */
+    sendMessage() {
+      this.httpFly.post({
+        healthEventId: this.healthEventId
+      }, 'healthRecord/api/v1/partner/pushHealthEventMaintainedMessage', res => {
+        this.toast('推送成功')
       })
     }
   }

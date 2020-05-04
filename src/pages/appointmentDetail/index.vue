@@ -30,6 +30,7 @@
             <div class="label">预约人</div>
             <div class="value">{{healthRecordInfo.name}} {{healthRecordInfo.gender}} {{healthRecordInfo.age}}岁</div>
           </div>
+          <textarea class="remark" v-model="remark" disabled @click="showRemark=true"></textarea>
         </div>
       </div>
       <div class="content">
@@ -37,25 +38,24 @@
           <div class="title">检查项目</div>
           <div class="list">
             <div class="item" v-for="(data, index) in list" :key="index">
-              <div class="name">{{data.examinationName}}</div>
+              <div class="name">{{data.examinationName ? data.examinationName : ''}}</div>
             </div>
           </div>
-        </div>
-        <div class="inspect-read">
-          <div class="title">检查须知</div>
-          <img class="introduce" src="" mode="widthFix" alt="" style="width: 100%">
         </div>
       </div>
     </div>
     <appointment :contractID="contractID" :institutation="reservationLocationID" :date="date" :time="time" :phoneNumber="reservationPhoneNumber" :show="showAppointmentDialog" @close="showAppointmentDialog=false" @confirm="confirmAppointment"></appointment>
+    <textarea-dialog label="预约" placeholder="请输入备注" :show="showRemark" v-model="newRemark" @close="showRemark=false" @confirm="updateRemark"></textarea-dialog>
   </div>
 </template>
 
 <script>
 import appointment from '@/components/appointment'
+import textareaDialog from '@/components/textarea-dialog'
 export default {
   components: {
-    appointment
+    appointment,
+    textareaDialog
   },
   data() {
     return {
@@ -96,7 +96,10 @@ export default {
       // 预约日期
       date: '',
       // 预约时间
-      time: ''
+      time: '',
+      remark: '备注：',
+      newRemark: '',
+      showRemark: false
     }
   },
   onLoad(options) {
@@ -138,6 +141,10 @@ export default {
         this.list = this.list.concat(res.examinations)
         this.reservationPhoneNumber = reservation.reservationPhoneNumber
         this.getHealthRecord(healthRecordId)
+        if(reservation.remark) {
+          this.remark = '备注：' + reservation.remark
+          this.newRemark = reservation.remark
+        }
       })
     },
     /**
@@ -184,6 +191,23 @@ export default {
         reservationID: this.reservationID
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/SignReservation', res => {
         this.getDetail()
+      })
+    },
+    /**
+     * 修改备注
+     */
+    updateRemark() {
+      this.httpFly.post({
+        contractID: this.contractID,
+        reservationID: this.reservationID,
+        reservationRemark: this.newRemark
+      }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/UpdateReservationRemark', res => {
+        this.utils.toast('修改成功')
+        this.remark = '备注：' + this.newRemark
+        this.showRemark = false
+      }, error => {
+        this.utils.toast('修改失败a')
+        this.newRemark = this.remark
       })
     }
   }
@@ -268,6 +292,14 @@ export default {
           .label {
             color: #999;
           }
+        }
+        .remark {
+          margin-top: 30rpx;
+          padding: 20rpx;
+          height: 180rpx;
+          background: rgba(245,245,245,1);
+          border: 1rpx solid rgba(225, 225, 225, 1);
+          border-radius: 10rpx;
         }
       }
     }

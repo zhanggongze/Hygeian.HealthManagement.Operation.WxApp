@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrap">
-    <div class="list">
+    <div class="list" v-if="list.length">
       <div class="item" v-for="(data, index) in list" :key="index" @click="toDetail(data)">
         <div class="info">
           <div class="name">{{data.eventType.displayName}}</div>
@@ -11,23 +11,30 @@
         </div>
       </div>
     </div>
-    <div class="primary-btn add-btn" @click="createHealthEvent">创建新的归档事件</div>
+    <div class="empty-data" v-else>
+      <img class="img" src="/static/images/empty_message.png" alt />
+      <div class="p">暂无记录</div>
+    </div>
+    <div class="primary-btn add-btn" @click="addDicom">手动添加</div>
+    <textarea-dialog label="手动添加" placeholder="请输入影像地址" v-model="dicomUrl" :show="showUpload" @close="showUpload=false" @confirm="upload"></textarea-dialog>
   </div>
 </template>
 <script>
+import textareaDialog from '@/components/textarea-dialog'
 export default {
+  components: {
+    textareaDialog
+  },
   data() {
     return {
-      // 健康档案ID
-      healthRecordId: '',
       // 卫生事件列表
-      list: []
+      list: [],
+      showUpload: false,
+      dicomUrl: ''
     }
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
-    this.healthRecordId = options.healthRecordId
-    this.queryHealthEvents()
   },
   onShow() {
     let pages = getCurrentPages();
@@ -53,17 +60,30 @@ export default {
         }))
       })
     },
-    createHealthEvent() {
-      wx.navigateTo({
-        url: '/pages/createArchived/main?healthRecordId=' + this.healthRecordId
-      })
+    addDicom() {
+      this.showUpload = true
     },
     /**
      * 跳转到上传附件界面
      */
     toDetail(data) {
       wx.navigateTo({
-        url: '/pages/inspectionItemDetail/main?healthEventId=' + data.id + '&type=archive'
+        url: '/pages/inspectionItemDetail/main?id=' + data.id
+      })
+    },
+    upload() {
+      if(!this.dicomUrl) {
+        this.utils.toast('请输入影像地址')
+        return
+      }
+      this.showUpload = false
+      let pages = getCurrentPages();
+      let prePage = pages[pages.length - 2]
+      prePage.setData({
+        dicomUrl: this.dicomUrl
+      })
+      wx.navigateBack({
+        delta: 1
       })
     }
   }
@@ -101,6 +121,9 @@ export default {
         }
       }
     }
+  }
+  .empty-data {
+    padding-top: 40%;
   }
   .add-btn {
     position: fixed;

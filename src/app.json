@@ -24,7 +24,9 @@
     "pages/appointment/main",
     "pages/appointmentDetail/main",
     "pages/eventTypeList/main",
-    "pages/createArchived/main"
+    "pages/createArchived/main",
+    "pages/dicomList/main",
+    "pages/pageview/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

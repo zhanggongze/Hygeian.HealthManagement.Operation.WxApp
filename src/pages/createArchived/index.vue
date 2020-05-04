@@ -103,7 +103,7 @@ export default {
         res => {
           this.utils.toast('创建成功')
           let pages = getCurrentPages();
-          let prePage = pages[pages.length - 2]
+          let prevPage = pages[pages.length - 2]
           prevPage.setData({
             needRefresh: true
           })
