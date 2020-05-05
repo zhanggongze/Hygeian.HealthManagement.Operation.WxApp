@@ -140,12 +140,12 @@ export default {
   .login-btn {
     margin-top: 40rpx;
     height: 100rpx;
-    border: 1px solid rgba(75, 195, 212, 1);
+    border: 1px solid #408BF1;
     border-radius: 50rpx;
     text-align: center;
     line-height: 100rpx;
     font-size: 32rpx;
-    color: #4dc5d9;
+    color: #408BF1;
   }
   .tip {
     margin-top: 76rpx;

@@ -21,7 +21,7 @@ import { envConfig } from '@/env/index'
 export default {
   data() {
     return {
-      launchList: [envConfig.FILEBASEURL + '/image/launch4.png', envConfig.FILEBASEURL + '/image/launch5.png', envConfig.FILEBASEURL + '/image/launch6.png']
+      launchList: [envConfig.FILEBASEURL + '/image/launch7.png', envConfig.FILEBASEURL + '/image/launch8.png', envConfig.FILEBASEURL + '/image/launch9.png']
     }
   },
   onLoad(options) {
@@ -82,7 +82,7 @@ export default {
   .login-btn {
     margin: 100rpx 100rpx 0;
     height: 100rpx;
-    background: linear-gradient(-20deg,rgba(61,90,139,1),rgba(96,129,177,1));
+    background:linear-gradient(-45deg,rgba(34,172,251,1),rgba(64,139,241,1));
     border-radius: 50rpx;
     text-align: center;
     line-height: 100rpx;

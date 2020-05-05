@@ -194,7 +194,7 @@ export default {
         skipCount: pageList[processIndex] * 10,
         maxResultCount: 10,
         LocationCode: wx.getStorageSync("activeInfo")['region'],
-        isFinished: processIndex === 1 ? true : null
+        isFinished: processIndex === 1 ? true : false
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
         this.totalCount = res.totalCount
         let result = res.items.map(obj => {

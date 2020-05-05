@@ -30,7 +30,8 @@
             <div class="label">预约人</div>
             <div class="value">{{healthRecordInfo.name}} {{healthRecordInfo.gender}} {{healthRecordInfo.age}}岁</div>
           </div>
-          <textarea class="remark" v-model="remark" disabled @click="showRemark=true"></textarea>
+          <div class="remark" v-if="showRemark">{{remark}}</div>
+          <textarea class="remark" v-else v-model="remark" disabled @click="showRemark=true"></textarea>
         </div>
       </div>
       <div class="content">
@@ -294,12 +295,15 @@ export default {
           }
         }
         .remark {
+          box-sizing: border-box;
           margin-top: 30rpx;
           padding: 20rpx;
           height: 180rpx;
           background: rgba(245,245,245,1);
           border: 1rpx solid rgba(225, 225, 225, 1);
           border-radius: 10rpx;
+          font-size: 30rpx;
+          color: #333;
         }
       }
     }

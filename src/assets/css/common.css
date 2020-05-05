@@ -53,7 +53,7 @@ textarea {
 
 .primary-btn {
   background:linear-gradient(-45deg,rgba(34,172,251,1),rgba(64,139,241,1));
-  box-shadow: 0 5rpx 16rpx 0 rgba(34, 153, 84, 0.35);
+  /* box-shadow: 0 5rpx 16rpx 0 rgba(34, 153, 84, 0.35); */
   border-radius: 44rpx;
   text-align: center;
   line-height: 88rpx;

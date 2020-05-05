@@ -91,6 +91,7 @@ export default {
         contractID: this.contractID,
         LocationCode: wx.getStorageSync('activeInfo')['region']
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryReservationLocations', res => {
+        this.list = []
         this.list = this.list.concat(res.items.map(obj => {
           return {
             key: obj.name,

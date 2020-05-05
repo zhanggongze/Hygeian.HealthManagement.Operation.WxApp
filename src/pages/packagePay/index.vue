@@ -25,12 +25,20 @@
             <div class="provider" v-if="data.provider">
               <div class="count">{{data.count}}</div>
               <div class="provider-info" v-if="data.provider.info">
+                <img v-if="data.provider.type === 'Doctor'" class="img" :src="data.provider.info.headImageUrl" alt="" />
+                <img v-if="data.provider.type === 'ReservationLocation'" class="hospital-icon" src="/static/images/service_hospital.png" alt="" srcset="">
+                <div class="name-professional">
+                  <div class="provider-name">{{data.provider.info.name}}</div>
+                  <div class="provider-professional" v-if="data.provider.type === 'Doctor'">{{data.provider.info.professionalTitle}}</div>
+                </div>
+              </div>
+              <!-- <div class="provider-info" v-if="data.provider.info">
                 <img class="img" :src="data.provider.info.headImageUrl" alt="" />
                 <div class="name-professional">
                   <div class="provider-name">{{data.provider.info.name}}</div>
                   <div class="provider-professional">{{data.provider.info.professionalTitle}}</div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div v-else>{{data.count}}</div>
           </div>
@@ -65,7 +73,7 @@ export default {
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
     this.contractParam = wx.getStorageSync('contractParam')
-    wx.removeStorageSync('contractParam')
+    // wx.removeStorageSync('contractParam')
     this.healthRecordId = this.contractParam.healthRecordId
     this.servicePackageId = this.contractParam.servicePackageId
     this.getHeathRecord()
@@ -85,12 +93,12 @@ export default {
           let provider = this.contractParam.designatedProviders.find(item => item.servicePackageItemId === obj.id)
           obj.provider = provider ? {
             type: provider.provider.type,
-            identity: provider.provider.identity
+            identity: provider.provider.identity,
+            name: provider.provider.name
           } : null
           return obj
         })
-        let doctorIDs = list.filter(obj => obj.provider && obj.provider.type === 'Doctor').map(obj => obj.provider.identity)
-        this.handleData(list, doctorIDs)
+        this.handleData(list)
         this.name = res.name
         this.price = res.sellingFee
       })
@@ -104,7 +112,16 @@ export default {
         this.patientAge = new Date().getFullYear() - new Date(res.dob).getFullYear()
       })
     },
-    handleData(list, doctorIDs) {
+    handleData(list) {
+      list = list.map(obj => {
+        if (obj.provider && obj.provider.type === 'ReservationLocation') {
+          obj.provider.info = {
+            name: obj.provider.name
+          }
+        }
+        return obj
+      })
+      let doctorIDs = list.filter(obj => obj.provider && obj.provider.type === 'Doctor').map(obj => obj.provider.identity)
       if(doctorIDs.length) {
         this.httpFly.post({
         query: `query{
@@ -228,6 +245,11 @@ export default {
                 width: 40rpx;
                 height: 40rpx;
                 border-radius: 50%;
+              }
+              .hospital-icon {
+                display: block;
+                width: 48rpx;
+                height: 48rpx;
               }
               .name-professional {
                 display: flex;

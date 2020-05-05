@@ -119,7 +119,7 @@ export default {
       let servicePackageId = serviceLoadingConfig.servicePackageId
       let healthRecordId = serviceLoadingConfig.healthRecordId
       if(configList.length === step) {
-        let designatedProviders = configList.filter(obj => obj.IsRequiredProvider && obj.ProviderIdentity).map(obj => {
+        let designatedProviders = configList.filter(obj => obj.ProviderIdentity).map(obj => {
           return {
             servicePackageItemId: obj.ItemID,
             provider: {
@@ -177,7 +177,7 @@ export default {
             this.handlerProvider()
           } else {
             wx.showModal({
-              content: '当前服务没有提供者，是否进行选择?',
+              content:  currentConfig.ServiceName + '没有提供者，是否进行选择?',
               success (res) {
                 if (res.confirm) {
                   _self.handlerProvider()
