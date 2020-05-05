@@ -124,6 +124,7 @@ export default {
     this.customerContractId = options.customerContractId
     this.customerContractItemId = options.customerContractItemId
     this.name = options.name
+    this.customerId = options.customerId
     this.queryDoctorInfo()
     this.getDetail()
   },
@@ -184,7 +185,6 @@ export default {
       this.httpFly.post({
         id: this.healthRecordId
       }, 'healthrecord/api/v1/partner/getHealthRecord', res => {
-        this.customerId = res.ownerships.customerId
         this.patientName = res.name;
         this.patientGender = res.gender;
         this.patientAge = new Date().getFullYear() - new Date(res.dob).getFullYear()
@@ -504,8 +504,7 @@ export default {
   .pay-btn {
     width: 180rpx;
     height: 60rpx;
-    background: linear-gradient(-90deg,rgba(82,204,234,1),rgba(69,187,192,1));
-    box-shadow: 0 5rpx 16rpx 0 rgba(26, 161, 156, 0.35);
+    background:linear-gradient(-45deg,rgba(34,172,251,1),rgba(64,139,241,1));
     border-radius: 30rpx;
     text-align: center;
     line-height: 60rpx;

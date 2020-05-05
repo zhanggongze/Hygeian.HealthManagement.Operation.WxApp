@@ -74,6 +74,14 @@ export default {
     
     this.getDetail()
   },
+  onShow() {
+    let pages = getCurrentPages()
+    let curPage = pages[pages.length - 1]
+    if (curPage.data.needRefresh) {
+      delete curPage.data.needRefresh
+      this.getDetail()
+    }
+  },
   methods: {
     /**
      * 获取检查详情

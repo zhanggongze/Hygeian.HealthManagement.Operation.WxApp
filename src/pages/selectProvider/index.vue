@@ -65,7 +65,8 @@ export default {
       // 健康档案ID
       healthRecordId: '',
       customerContractId: '',
-      customerContractItemId: ''
+      customerContractItemId: '',
+      customerId: ''
     }
   },
   onLoad(options) {
@@ -80,13 +81,20 @@ export default {
     this.customerContractItemId = options.customerContractItemId
     this.customerContractId = options.customerContractId
     this.healthRecordId = options.healthRecordId
+    this.customerId = options.customerId
+    let title = ''
     if(this.serviceType === 'ConsultByAsk' || this.serviceType === 'IM') {
       this.providerType = 'Doctor'
       this.getDoctorList()
+      title = '选择医生'
     } else {
       this.providerType = 'ReservationLocation'
       this.getInstitutionsList()
+      title = '选择机构'
     }
+    wx.setNavigationBarTitle({
+      title: title
+    })
   },
   methods: {
     getDoctorList() {
@@ -164,7 +172,7 @@ export default {
     selectProvider(data) {
       if(this.isConsume && this.serviceType === 'ConsultByAsk') {
         wx.redirectTo({
-          url: `/pages/illnessDescription/main?doctorID=${data.id}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&name=${this.serviceName}`
+          url: `/pages/illnessDescription/main?doctorID=${data.id}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&name=${this.serviceName}&customerId=${this.customerId}`
         })
       } else {
         wx.redirectTo({

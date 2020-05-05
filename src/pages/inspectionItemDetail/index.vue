@@ -202,6 +202,13 @@ export default {
                 examinationID: _self.id
               }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/FinishExamination', res => {
                 _self.progress = 400
+                let pages = getCurrentPages();
+                // 上一个页面
+                let prevPage = pages[pages.length - 2];
+                // 往上一个页面传递数据，用于刷新上一个页面数据
+                prevPage.setData({
+                  needRefresh: true
+                })
               })
             } 
           }

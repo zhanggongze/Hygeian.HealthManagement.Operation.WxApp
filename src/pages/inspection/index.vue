@@ -3,7 +3,7 @@
     <div class="search-box-wrap">
       <div class="search-wrap">
         <img class="icon-search" src="/static/images/icon_search.png" alt />
-        <input class="input" placeholder="请输入客户姓名进行搜索" confirm-type="search" v-model="keyword" @confirm="search" />
+        <input class="input" placeholder="请输入客户姓名或关联手机号进行搜索" confirm-type="search" v-model="keyword" @confirm="search" />
       </div>
     </div>
     <div class="navs">
@@ -33,7 +33,7 @@
                   <div class="label">检查机构：{{data.reservation.reservationLocationName}}</div>
                 </div>
               </div>
-              <div class="footer">
+              <div class="footer" v-if="data.healthRecordInfo">
                 <div class="patient-info">
                   <div class="patient-name">{{data.healthRecordInfo.name}}</div>
                 </div>
@@ -147,16 +147,17 @@ export default {
         this.list1 = []
       }
       this.httpFly.post({
-        name: this.keyword,
+        keyword: this.keyword,
+        // name: this.keyword,
         skipCount: 0,
         maxResultCount: 999
-      }, '/healthrecord/api/v1/partner/queryHealthRecords', res => {
+      }, '/healthrecord/api/v1/partner/queryHealthRecordsWithCustomer', res => {
         if(res && res.items && res.items.length) {
-          this.healthRecordIDs = res.items.map(obj => obj.id)
+          this.healthRecordIDs = res.items.map(obj => obj.healthRecordId)
           this.healthRecordsInfo = res.items.reduce((a, b) => {
-            if(!a[b['id']]) {
+            if(!a[b['healthRecordId']]) {
               b.age = this.utils.getAge(b.dob)
-              a[b['id']] = b
+              a[b['healthRecordId']] = b
             }
             return a
           }, {})

@@ -73,11 +73,13 @@ export default {
       // 套餐项合同ID
       customerContractItemId: '',
       // 套餐项ID
-      servicePackageItemId: ''
+      servicePackageItemId: '',
+      customerId: ''
     }
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
+    this.customerId = options.customerId
     this.id = options.id
     this.healthRecordId = options.healthRecordId
     this.isConsume = options.isConsume && options.isConsume == 1 ? true : false
@@ -125,11 +127,11 @@ export default {
       if(this.isConsume) {
         if(this.identity) {
           wx.redirectTo({
-            url: `/pages/illnessDescription/main?doctorID=${this.identity}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&name=${this.serviceName}`
+            url: `/pages/illnessDescription/main?doctorID=${this.identity}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&name=${this.serviceName}&customerId=${this.customerId}`
           })
         } else {
           wx.redirectTo({
-            url: `/pages/selectProvider/main?isConsume=1&serviceType=${this.serviceType}&serviceName=${this.serviceName}&serviceCount=${this.serviceCount}&healthRecordId=${this.healthRecordId}&servicePackageProvider=${this.id}&servicePackageItemProvider=${this.servicePackageItemId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}`
+            url: `/pages/selectProvider/main?isConsume=1&serviceType=${this.serviceType}&serviceName=${this.serviceName}&serviceCount=${this.serviceCount}&healthRecordId=${this.healthRecordId}&servicePackageProvider=${this.id}&servicePackageItemProvider=${this.servicePackageItemId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&customerId=${this.customerId}`
           })
         }
       } else {

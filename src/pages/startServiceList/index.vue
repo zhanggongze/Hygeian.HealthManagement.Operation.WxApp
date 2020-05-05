@@ -14,13 +14,13 @@
               <div class="label">时间：{{data.activedDateTime}}</div>
             </div>
           </div>
-          <div class="footer">
+          <div class="footer" v-if="data.healthRecordInfo">
             <div class="patient-info">
-              <div class="patient-name">张三</div>
+              <div class="patient-name">{{data.healthRecordInfo.name}}</div>
             </div>
             <div class="gender-age">
-              <span class="gender">男</span>
-              <span class="age">6岁</span>
+              <span class="gender">{{data.healthRecordInfo.gender}}</span>
+              <span class="age">{{data.healthRecordInfo.age}}岁</span>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default {
         '10': '次'
       }
       wx.navigateTo({
-        url: `/pages/packageIntroduction/main?isConsume=1&serviceType=${data.serviceType}&id=${data.customerContract.servicePackageId}&servicePackageItemId=${data.servicePackageItemId}&healthRecordId=${data.customerContract.healthRecordId}&identity=${data.provider.identity ? data.provider.identity : ''}&customerContractId=${data.customerContract.id}&customerContractItemId=${data.id}&serviceName=${data.name}&serviceCount=${data.totalUnits + unitDict[String(data.unit)]}`
+        url: `/pages/packageIntroduction/main?isConsume=1&serviceType=${data.serviceType}&id=${data.customerContract.servicePackageId}&servicePackageItemId=${data.servicePackageItemId}&healthRecordId=${data.customerContract.healthRecordId}&identity=${data.provider.identity ? data.provider.identity : ''}&customerContractId=${data.customerContract.id}&customerContractItemId=${data.id}&serviceName=${data.name}&serviceCount=${data.totalUnits + unitDict[String(data.unit)]}&customerId=${data.customerContract.customerId}`
       })
     }
   }
