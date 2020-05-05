@@ -59,7 +59,7 @@ export default {
       })
     },
     search() {
-      this.pageIndex = 0
+      this.pageIndex = 1
       this.list = []
       this.getList()
     }
