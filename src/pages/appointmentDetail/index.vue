@@ -30,7 +30,7 @@
             <div class="label">预约人</div>
             <div class="value">{{healthRecordInfo.name}} {{healthRecordInfo.gender}} {{healthRecordInfo.age}}岁</div>
           </div>
-          <div class="remark" v-if="showRemark">{{remark}}</div>
+          <div class="remark" v-if="showRemark || showAppointmentDialog">{{remark}}</div>
           <textarea class="remark" v-else v-model="remark" disabled @click="showRemark=true"></textarea>
         </div>
       </div>
@@ -175,7 +175,7 @@ export default {
       this.httpFly.post({
         contractID: this.contractID,
         reservationID: this.reservationID,
-        reservationDateTime: new Date(data.date + ' ' + data.time + ':00').toISOString(),
+        reservationDateTime: new Date((data.date + ' ' + data.time + ':00').replace(/-/g, '/')).toISOString(),
         reservationLocationID: data.institutation,
         phoneNumber: data.phoneNumber
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/MakeReservation', res => {

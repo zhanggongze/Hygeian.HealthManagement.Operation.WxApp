@@ -30,7 +30,7 @@ function toTargetUrl() {
       url: targetUrl
     })
   } else {
-    wx.switchTab({
+    wx.reLaunch({
       url: '/pages/index/main'
     })
   }

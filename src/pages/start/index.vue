@@ -71,7 +71,7 @@ export default {
      * 跳转首页
      */
     goIndex() {
-      wx.navigateTo({
+      wx.reLaunch({
         url: "/pages/index/main"
       });
     },

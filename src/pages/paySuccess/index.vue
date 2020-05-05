@@ -2,7 +2,7 @@
   <div class="page-wrap">
     <div class="success">
       <img src="/static/images/icon_Success.png" alt />
-      <div class="tip">购买成功！</div>
+      <div class="tip">赠送成功！</div>
     </div>
     <div class="primary-btn confirm-btn" @click="toChat">确定</div>
   </div>
