@@ -127,8 +127,8 @@ export default {
   img {
     position: absolute;
     bottom: 100rpx;
-    width: 238rpx;
-    height: 84rpx;
+    width: 269rpx;
+    height: 83rpx;
   }
 }
 </style>

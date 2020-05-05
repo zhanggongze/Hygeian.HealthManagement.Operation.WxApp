@@ -25,13 +25,13 @@
         </div>
         <div class="c1">
           <div class="imgft" @click="navtoInspection()">
-            <img src="/static/images/work_clue.png" />
+            <img src="/static/images/work_result.png" />
             <p>检查结果</p>
           </div>
         </div>
         <div class="c1">
           <div class="imgft" @click="navtoCreateRecord()">
-            <img src="/static/images/work_agent.png" />
+            <img src="/static/images/work_add.png" />
             <p>客户建档</p>
           </div>
         </div>
@@ -39,19 +39,19 @@
       <div class="item">
         <div class="c1">
           <div class="imgft" @click="navtoRecordList('servicePackage')">
-            <img src="/static/images/work_agencyfee.png" />
+            <img src="/static/images/work_gift.png" />
             <p>套餐赠送</p>
           </div>
         </div>
         <div class="c1">
           <div class="imgft" @click="navtoRecordList('healthEvent')">
-            <img src="/static/images/work_agencyfee.png" />
+            <img src="/static/images/work_attach.png" />
             <p>附件归档</p>
           </div>
         </div>
         <div class="c1">
           <div class="imgft" @click="navtoStartServiceList()">
-            <img src="/static/images/work_agencyfee.png" />
+            <img src="/static/images/work_backlogserve.png" />
             <p>待发起的服务</p>
           </div>
         </div>
