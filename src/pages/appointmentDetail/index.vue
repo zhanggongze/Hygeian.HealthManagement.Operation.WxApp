@@ -181,6 +181,7 @@ export default {
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/MakeReservation', res => {
         this.showAppointmentDialog = false
         this.getDetail()
+        this.refreshPrePage()
       })
     },
     /**
@@ -192,6 +193,7 @@ export default {
         reservationID: this.reservationID
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/SignReservation', res => {
         this.getDetail()
+        this.refreshPrePage()
       })
     },
     /**
@@ -209,6 +211,18 @@ export default {
       }, error => {
         this.utils.toast('修改失败a')
         this.newRemark = this.remark
+      })
+    },
+    /**
+     * 刷新上一个页面数据
+     */
+    refreshPrePage() {
+      let pages = getCurrentPages();
+      // 上一个页面
+      let prevPage = pages[pages.length - 2];
+      // 往上一个页面传递数据，用于刷新上一个页面数据
+      prevPage.setData({
+        needRefresh: true
       })
     }
   }

@@ -176,10 +176,6 @@ export default {
       totalCount2: 0,
       pageIndex3: 0,
       totalCount3: 0,
-      isEmpty: true,
-      isEmpty1: true,
-      isEmpty2: true,
-      isEmpty3: true,
       list: [],
       list1: [],
       list2: [],
@@ -208,7 +204,11 @@ export default {
       this.list1 = []
       this.list2 = []
       this.list3 = []
-      this.queryList(0)
+      if (this.keyword) {
+        this.queryList(0)
+      } else {
+        this.totalCount = 0
+      }
       this.queryList(1)
       this.queryList(2)
       this.queryList(3)
