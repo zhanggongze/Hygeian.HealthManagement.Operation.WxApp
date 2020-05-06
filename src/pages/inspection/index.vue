@@ -134,6 +134,10 @@ export default {
       })
     }
   },
+  onPullDownRefresh() {
+    wx.showNavigationBarLoading()
+    this.search()
+  },
   methods: {
     init(callback) {
       let index = this.currentIndex
@@ -197,7 +201,8 @@ export default {
         locationCode: wx.getStorageSync("activeInfo")['region'],
         isFinished: processIndex === 1 ? true : false
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
-        this.totalCount = res.totalCount
+        wx.hideNavigationBarLoading() //完成停止加载
+        wx.stopPullDownRefresh()
         let result = res.items.map(obj => {
           obj.healthRecordInfo = this.healthRecordsInfo[obj.contract.contractHealthRecordId]
           obj.contractStartDateTime = this.utils.formatTime(obj.contract.contractStartDateTime, 'yyyy-MM-dd')
@@ -213,6 +218,9 @@ export default {
           this.totalCount1 = res.totalCount
           this.list1 = this.list1.concat(result)
         }
+      }, error => {
+        wx.hideNavigationBarLoading() //完成停止加载
+        wx.stopPullDownRefresh()
       })
     },
     navClick(data, index) {

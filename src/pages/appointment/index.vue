@@ -214,6 +214,10 @@ export default {
       this.queryList(3)
     }
   },
+  onPullDownRefresh() {
+    wx.showNavigationBarLoading()
+    this.search()
+  },
   methods: {
     init(callback) {
       let index = this.currentIndex
@@ -303,6 +307,8 @@ export default {
         maxResultCount: 10,
         locationCode: type === 0 ? 0 : wx.getStorageSync("activeInfo")['region']
       }, '/servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/QueryContracts', res => {
+        wx.hideNavigationBarLoading() //完成停止加载
+        wx.stopPullDownRefresh()
         let result = res.items.map(obj => {
           obj.healthRecordInfo = this.healthRecordsInfo[obj.contract.contractHealthRecordId]
           obj.contractStartDateTime = this.utils.formatTime(obj.contract.contractStartDateTime, 'yyyy-MM-dd')
@@ -328,6 +334,9 @@ export default {
           this.totalCount3 = res.totalCount
           this.list3 = this.list3.concat(result)
         }
+      }, error => {
+        wx.hideNavigationBarLoading() //完成停止加载
+        wx.stopPullDownRefresh()
       })
     },
     search() {
@@ -340,6 +349,8 @@ export default {
         } else {
           this.list = []
           this.totalCount = 0
+          wx.hideNavigationBarLoading() //完成停止加载
+          wx.stopPullDownRefresh()
         }
       } else {
         this.init(() => {
@@ -453,7 +464,7 @@ export default {
     }
   }
   .result {
-    height: calc(100vh - 168rpx);
+    height: calc(100vh - 188rpx);
     background-color: #f5f5f5;
     .empty-data {
       padding-top: 40%;
