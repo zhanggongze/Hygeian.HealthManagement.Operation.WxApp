@@ -142,7 +142,9 @@ export default {
             return a
           }, {})
           this.list = this.list.concat(list.map(obj => {
-            obj.provider.info = doctorObj[obj.provider.identity]
+            if(obj.provider) {
+              obj.provider.info = doctorObj[obj.provider.identity]
+            }
             return obj
           }))
         } else {
