@@ -129,14 +129,14 @@ export default {
             }
           }
         })
-        let reservedBusinesses = configList.filter(obj => obj.IsRequiredBusinessService).map(obj => {
+        let reservedBusinesses = configList.filter(obj => obj.BusinessProviderIdentity).map(obj => {
           return {
             servicePackageItemId: obj.ItemID,
             business: {
               provider: {
-                type: obj.ProviderType,
-                identity: obj.ProviderIdentity,
-                name: obj.ProviderName
+                type: obj.BusinessProviderType,
+                identity: obj.BusinessProviderIdentity,
+                name: obj.BusinessProviderName
               },
               businessId: obj.BusinessServiceID
             }
