@@ -32,7 +32,7 @@ export default {
         key: 'PDF',
         value: 'pdf'
       }, {
-        key: '影像',
+        key: '影像报告',
         value: 'dicomurl'
       }],
       fileList: []

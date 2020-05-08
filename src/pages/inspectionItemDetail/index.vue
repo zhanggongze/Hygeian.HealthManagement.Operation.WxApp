@@ -220,17 +220,24 @@ export default {
      * 文件上传
      */
     upload(file) {
-      this.httpFly.post({
+      let param = {
         healthEventId: this.healthEventId,
         fileType: file.type,
-        fileUrl: file.url,
-        source: {
+        fileUrl: file.url
+      }
+      if(this.id) {
+        param.source = {
           type: 'Exam',
           identity: this.id
         }
-      }, 'healthRecord/api/v1/partner/createEvidence', res => {
+      }
+      this.httpFly.post(param, 'healthRecord/api/v1/partner/createEvidence', res => {
         this.showUpload = false
-        this.getDetail()
+        if(this.healthEventId) {
+          this.getHealthEvent()
+        } else {
+          this.getDetail()
+        }
       })
     },
     /**
