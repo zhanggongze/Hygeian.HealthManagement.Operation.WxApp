@@ -166,6 +166,10 @@ export default {
           urls: [fileUrl]
         });
       } else if (fileType === 'pdf') {
+        wx.showLoading({
+          title: '正在打开...',
+          mask: true
+        })
         wx.downloadFile({
           url: fileUrl,
           success: function (res) {
@@ -174,8 +178,14 @@ export default {
               filePath: filePath,
               success: function (res) {
                 console.log('打开文档成功')
+              },
+              complete: function (res) {
+                wx.hideLoading()
               }
             })
+          },
+          fail: function () {
+            wx.hideLoading()
           }
         })
       } else if (fileType === 'dicomurl') {
