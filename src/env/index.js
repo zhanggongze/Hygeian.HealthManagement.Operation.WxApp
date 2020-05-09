@@ -7,7 +7,7 @@ let envConfigInfo
 if (env === 'develop') {
   envConfigInfo = developConfig
 } else if (env === 'trial') {
-  envConfigInfo = developConfig
+  envConfigInfo = trialConfig
 } else {
   envConfigInfo = releaseConfig
 }

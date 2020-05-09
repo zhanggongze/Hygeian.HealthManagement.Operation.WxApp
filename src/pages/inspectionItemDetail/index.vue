@@ -247,7 +247,7 @@ export default {
       this.httpFly.post({
         healthEventId: this.healthEventId
       }, 'healthRecord/api/v1/partner/pushHealthEventMaintainedMessage', res => {
-        this.toast('推送成功')
+        this.utils.toast('推送成功')
       })
     }
   }
