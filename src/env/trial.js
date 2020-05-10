@@ -12,6 +12,6 @@ export const trialConfig = {
   COSSECRETKEY: '99694rU2Wu7AkCTvNmHuOl0HSUO6SgpM',
   COSBUCKET: 'pre-public-1300222288',
   COSREGION: 'ap-chengdu',
-  VERSION: '1.0.1.2020030801',
+  VERSION: '1.0.0.2020051001',
   SERVIEASKURL: SOURCEAPI + '/service/twzx_intro.png'
 }
