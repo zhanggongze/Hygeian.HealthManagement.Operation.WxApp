@@ -193,10 +193,7 @@ export default {
       }
     },
     handlerProvider() {
-      let unitDict = {
-        '0': '日',
-        '10': '次'
-      }
+      let unitDict = this.dict.UnitDict
       let serviceLoadingConfig = wx.getStorageSync('serviceLoadingConfig')
       let configList = serviceLoadingConfig.configList
       let step = serviceLoadingConfig.step
@@ -207,10 +204,7 @@ export default {
       })
     },
     handlerBusiness() {
-      let unitDict = {
-        '0': '日',
-        '10': '次'
-      }
+      let unitDict = this.dict.UnitDict
       let serviceLoadingConfig = wx.getStorageSync('serviceLoadingConfig')
       let configList = serviceLoadingConfig.configList
       let step = serviceLoadingConfig.step

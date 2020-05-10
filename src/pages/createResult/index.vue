@@ -18,7 +18,7 @@
         <div class="value">{{ usualRegionText }}</div>
       </div>
     </div>
-    <div class="tip">扫一扫获取健康档案</div>
+    <div class="tip">扫一扫创建健康档案</div>
     <img v-if="qrCodeUrl" class="qr-code" :src="qrCodeUrl" alt="" />
   </div>
 </template>
