@@ -208,7 +208,7 @@ export default {
         usualRegionCode: this.usualRegion,
         usualRegionName: this.pickerText,
         id: this.id
-      }, '/healthrecord/api/v1/public/getHealthRecordBindingQRCode', res => {
+      }, '/healthrecord/api/v1/partner/getHealthRecordBindingQRCode', res => {
         if (res && res.scene) {
           this.qrCodeUrl = envConfig.FILEBASEURL + `qrcode/wxmp/wx164b87580d38c859/${res.scene}.png`
           this.showQrCode = true

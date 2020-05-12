@@ -20,7 +20,7 @@
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
 	"appid": "wx74b0e2afce9571e3",
-	"projectname": "doctor_hotfix",
+	"projectname": "operation",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
