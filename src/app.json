@@ -26,7 +26,10 @@
     "pages/eventTypeList/main",
     "pages/createArchived/main",
     "pages/dicomList/main",
-    "pages/pageview/main"
+    "pages/pageview/main",
+    "pages/regionalStatistics/main",
+    "pages/lineStatisticsDetail/main",
+    "pages/barStatisticsDetail/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
