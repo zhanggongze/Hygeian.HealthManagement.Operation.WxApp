@@ -114,6 +114,21 @@
 					"id": -1,
 					"name": "pages/regionalStatistics/main",
 					"pathName": "pages/regionalStatistics/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 10,
+					"name": "pages/barStatisticsDetail/main",
+					"pathName": "pages/barStatisticsDetail/main",
+					"query": "serviceType=im",
+					"scene": null
+				},
+				{
+					"id": 11,
+					"name": "pages/lineStatisticsDetail/main",
+					"pathName": "pages/lineStatisticsDetail/main",
+					"query": "serviceType=ask",
 					"scene": null
 				}
 			]
