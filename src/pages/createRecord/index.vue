@@ -164,7 +164,7 @@ export default {
       this.httpFly.post({
         name: this.name,
         gender: this.gender,
-        dob: new Date(this.dob.replace(/-/g, '/')).toISOString(),
+        dob: this.utils.formatGMTDate(this.dob),
         skipCount: 0,
         maxResultCount: 100
       }, 'healthrecord/api/v1/public/queryHealthRecords', res => {
@@ -204,7 +204,7 @@ export default {
       this.httpFly.post({
         name: this.name,
         gender: this.gender,
-        dob: new Date(this.dob.replace(/-/g, '/')).toISOString(),
+        dob: this.utils.formatGMTDate(this.dob),
         usualRegionCode: this.usualRegion,
         usualRegionName: this.pickerText,
         id: this.id

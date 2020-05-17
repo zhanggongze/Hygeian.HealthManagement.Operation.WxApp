@@ -18,19 +18,19 @@
     <div class="content">
       <div class="item">
         <div class="c1">
-          <div class="imgft" @click="navtoAppointment()">
+          <div class="imgft" @click="navigateTo('/pages/appointment/main')">
             <img src="/static/images/work_subscribe.png" />
             <p>预约管理</p>
           </div>
         </div>
         <div class="c1">
-          <div class="imgft" @click="navtoInspection()">
+          <div class="imgft" @click="navigateTo('/pages/inspection/main')">
             <img src="/static/images/work_result.png" />
             <p>检查结果</p>
           </div>
         </div>
         <div class="c1">
-          <div class="imgft" @click="navtoCreateRecord()">
+          <div class="imgft" @click="navigateTo('/pages/createRecord/main')">
             <img src="/static/images/work_add.png" />
             <p>客户建档</p>
           </div>
@@ -38,23 +38,38 @@
       </div>
       <div class="item">
         <div class="c1">
-          <div class="imgft" @click="navtoRecordList('servicePackage')">
+          <div class="imgft" @click="navigateTo('/pages/recordList/main?useType=servicePackage')">
             <img src="/static/images/work_gift.png" />
             <p>套餐赠送</p>
           </div>
         </div>
         <div class="c1">
-          <div class="imgft" @click="navtoRecordList('healthEvent')">
+          <div class="imgft" @click="navigateTo('/pages/recordList/main?useType=healthEvent')">
             <img src="/static/images/work_attach.png" />
             <p>附件归档</p>
           </div>
         </div>
         <div class="c1">
-          <div class="imgft" @click="navtoStartServiceList()">
+          <div class="imgft" @click="navigateTo('/pages/startServiceList/main')">
             <img src="/static/images/work_backlogserve.png" />
             <p>待发起的服务</p>
           </div>
         </div>
+      </div>
+      <div class="item">
+        <div class="c1">
+          <div class="imgft" @click="navigateTo('/pages/regionalStatistics/main')">
+            <img src="/static/images/work_stat.png" />
+            <p>区域统计分析</p>
+          </div>
+        </div>
+        <div class="c1">
+          <div class="imgft" @click="navigateTo('/pages/responseStatistics/main')">
+            <img src="/static/images/work_response.png" />
+            <p>医生响应查询</p>
+          </div>
+        </div>
+        <div class="c1"></div>
       </div>
     </div>
 
@@ -118,29 +133,9 @@ export default {
 
       this.isShow = false;
     },
-    navtoAppointment() {
+    navigateTo(url) {
       wx.navigateTo({
-        url: "/pages/appointment/main"
-      });
-    },
-    navtoInspection() {
-      wx.navigateTo({
-        url: "/pages/inspection/main"
-      });
-    },
-    navtoRecordList(type) {
-      wx.navigateTo({
-        url: "/pages/recordList/main?useType=" + type
-      });
-    },
-    navtoCreateRecord() {
-      wx.navigateTo({
-        url: "/pages/createRecord/main"
-      });
-    },
-    navtoStartServiceList() {
-      wx.navigateTo({
-        url: '/pages/startServiceList/main'
+        url
       })
     }
   },

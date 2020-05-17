@@ -175,7 +175,7 @@ export default {
     confirm(data) {
       this.httpFly.post({
         healthRecordId: this.healthRecordId,
-        occurrenceDateTime: new Date(data.date.replace(/-/g, '/')).toISOString(),
+        occurrenceDateTime: this.utils.formatGMTDate(data.date),
         institution: this.reservationLocationName,
         source: {
           type: 'Exam',

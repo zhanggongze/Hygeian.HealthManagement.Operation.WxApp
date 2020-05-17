@@ -175,7 +175,7 @@ export default {
       this.httpFly.post({
         contractID: this.contractID,
         reservationID: this.reservationID,
-        reservationDateTime: new Date((data.date + ' ' + data.time + ':00').replace(/-/g, '/')).toISOString(),
+        reservationDateTime: this.utils.formatGMTDate(data.date + ' ' + data.time + ':00'),
         reservationLocationID: data.institutation,
         phoneNumber: data.phoneNumber
       }, 'servicepackage/api/v1/partner/PhysicalExamination/ExaminationServiceContract/MakeReservation', res => {

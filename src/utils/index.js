@@ -174,6 +174,25 @@ export function formatDate (v, format) {
   return format;
 }
 
+export function formatGMTDate(str) {
+  if(!str) {
+    return ''
+  }
+  let date = new Date(str.replace(/-/g, '/'))
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+
+  const t1 = [year, month, day].map(formatNumber).join('-')
+  const t2 = [hour, minute, second].map(formatNumber).join(':')
+
+  return `${t1}T${t2}+08:00`
+}
+
 export default {
   formatNumber,
   formatTime,
@@ -183,5 +202,6 @@ export default {
   timeHandle,
   uuid,
   formateCity,
-  formatDate
+  formatDate,
+  formatGMTDate
 }

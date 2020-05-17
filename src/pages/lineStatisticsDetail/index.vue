@@ -216,8 +216,8 @@ export default {
       this.totalCount = 0
       this.httpFly.post({
         region: wx.getStorageSync('activeInfo')['region'],
-        startDateTime: new Date(startDateTime),
-        endDateTime: new Date(endDateTime),
+        startDateTime: this.utils.formatGMTDate(startDateTime),
+        endDateTime: this.utils.formatGMTDate(endDateTime),
         hospitalName: this.hospitalName
       }, `report${this.url}`, res => {
         this.list = this.list.concat(res.dailySummaries.map(obj => {

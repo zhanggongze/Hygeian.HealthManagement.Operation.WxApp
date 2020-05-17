@@ -29,7 +29,11 @@
     "pages/pageview/main",
     "pages/regionalStatistics/main",
     "pages/lineStatisticsDetail/main",
-    "pages/barStatisticsDetail/main"
+    "pages/barStatisticsDetail/main",
+    "pages/responseStatistics/main",
+    "pages/askResponse/main",
+    "pages/imResponse/main",
+    "pages/imResponseDetail/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

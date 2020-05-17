@@ -52,7 +52,7 @@ export default {
       this.httpFly.post({
         name: this.name,
         gender: this.gender,
-        dob: new Date(this.dob.replace(/-/g, '/')).toISOString(),
+        dob: this.utils.formatGMTDate(this.dob),
         usualRegionCode: this.usualRegion,
         usualRegionName: this.usualRegionText,
         id: ''

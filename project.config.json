@@ -121,7 +121,7 @@
 					"id": 10,
 					"name": "pages/barStatisticsDetail/main",
 					"pathName": "pages/barStatisticsDetail/main",
-					"query": "serviceType=im",
+					"query": "serviceType=ask",
 					"scene": null
 				},
 				{
@@ -129,6 +129,27 @@
 					"name": "pages/lineStatisticsDetail/main",
 					"pathName": "pages/lineStatisticsDetail/main",
 					"query": "serviceType=ask",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/askResponse/main",
+					"pathName": "pages/askResponse/main",
+					"query": "serviceType=ask",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/imResponse/main",
+					"pathName": "pages/imResponse/main",
+					"query": "serviceType=ask",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/imResponseDetail/main",
+					"pathName": "pages/imResponseDetail/main",
+					"query": "groupId=c69ea2ed-b5fb-4ce3-ae30-fb7d5db5ea3b",
 					"scene": null
 				}
 			]
