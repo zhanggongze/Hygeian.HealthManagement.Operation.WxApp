@@ -13,7 +13,9 @@
     <div class="hr"></div>
     <div class="result-wrap">
       <div class="chart-content">
-        <mpvue-echarts :echarts="echarts" :onInit="initChart" canvasId="demo-canvas"/>
+        <div class="chart-wrap" v-show="showSearchIndex === -1">
+          <mpvue-echarts :echarts="echarts" :onInit="initChart" canvasId="demo-canvas"/>
+        </div>
       </div>
       <div class="info">
         <div class="time-range">{{startDate}}至{{endDate}}</div>
@@ -352,6 +354,9 @@ export default {
   .chart-content {
     padding: 20rpx 0;
     height: 500rpx;
+    .chart-wrap { 
+      height: 500rpx;
+    }
   }
   .info {
     display: flex;
