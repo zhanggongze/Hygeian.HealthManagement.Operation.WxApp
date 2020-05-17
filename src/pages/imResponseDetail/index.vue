@@ -78,9 +78,13 @@ const recordOptions = {
   encodeBitRate: 192000,
   format: 'aac' // 音频格式，选择此格式创建的音频消息，可以在即时通信 IM 全平台（Android、iOS、微信小程序和Web）互通
 }
+import { emojiName, emojiMap, emojiUrl } from "@/utils/emojiMap"
 export default {
   data() {
     return {
+      emojiName: emojiName,
+      emojiMap: emojiMap,
+      emojiUrl: emojiUrl,
       groupId: '',
       list: [],
       healthRecordId: '',
@@ -119,10 +123,55 @@ export default {
           obj.type = message.MsgType
           if(obj.type === 'TIMTextElem') {
             let content = message.MsgContent.Text
-            obj.virtualDom = [{
-              name: 'span',
-              text: content
-            }]
+            let imoList = content.match(/[^[]+(?=])/g)
+            if (imoList) {
+              imoList = imoList.filter(obj => this.emojiName.indexOf('[' + obj + ']') > -1)
+            } else {
+              imoList = []
+            }
+            imoList = imoList.map(obj => '[' + obj + ']')
+            obj.virtualDom = []
+            if(imoList.length) {
+              for(let j = 0, jen = imoList.length; j < jen; j++) {
+                if (content.indexOf(imoList[j]) === 0) {
+                  obj.virtualDom.push({
+                    name: 'img',
+                    src: this.emojiUrl +this.emojiMap[imoList[j]]
+                  })
+                  content = content.replace(imoList[j], '')
+                } else {
+                  let text = content.substr(0, content.indexOf(imoList[j]))
+                  obj.virtualDom.push({
+                    name: 'span',
+                    text: text
+                  })
+                  content = content.replace(text, '')
+                  obj.virtualDom.push({
+                    name: 'img',
+                    src: this.emojiUrl +this.emojiMap[imoList[j]]
+                  })
+                  content = content.replace(imoList[j], '')
+                }
+                if (imoList[j + 1]) {
+                  let text = content.substr(0, content.indexOf(imoList[j + 1]))
+                  obj.virtualDom.push({
+                    name: 'span',
+                    text: text
+                  })
+                  content = content.replace(text + imoList[j + 1], '')
+                } else {
+                  obj.virtualDom.push({
+                    name: 'span',
+                    text: content
+                  })
+                }
+              }
+            } else {
+              obj.virtualDom.push({
+                name: 'span',
+                text: content
+              })
+            }
           } else if(obj.type === 'TIMImageElem') {
             let file = message.MsgContent.ImageInfoArray.find(obj => obj.sizeType == 1)
             if(file) {
