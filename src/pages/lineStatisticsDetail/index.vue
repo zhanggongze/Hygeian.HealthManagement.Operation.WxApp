@@ -14,7 +14,7 @@
     <div class="result-wrap">
       <div class="chart-content">
         <div class="chart-wrap" v-show="showSearchIndex === -1">
-          <mpvue-echarts :echarts="echarts" :onInit="initChart" canvasId="demo-canvas"/>
+          <mpvue-echarts lazyLoad :echarts="echarts" :onInit="initChart" ref="echarts"/>
         </div>
       </div>
       <div class="info">
@@ -194,6 +194,9 @@ export default {
     }
     this.queryReport()
   },
+  onUnload() {
+    chart = null
+  },
   methods: {
     /**
      * 查询报表
@@ -232,7 +235,7 @@ export default {
         this.totalCount = res.totalCount
         option.xAxis.data = this.list.map(obj => obj.time.substr(5))
         option.series[0]['data'] = this.list.map(obj => obj.totalCount)
-        chart.setOption(option, true)
+        this.$refs.echarts.init()
       })
     },
     /**
@@ -294,13 +297,15 @@ export default {
      * 初始化图表对象
      */
     initChart(canvas, width, height) {
-      chart = echarts.init(canvas, null, {
-        width: width,
-        height: height
-      })
-      canvas.setChart(chart)
+      if (!chart) {
+        chart = echarts.init(canvas, null, {
+          width: width,
+          height: height
+        })
+        canvas.setChart(chart)
+      }
       chart.setOption(option, true)
-      return chart; // 返回 chart 后可以自动绑定触摸操作
+      return chart
     }
   }
 }

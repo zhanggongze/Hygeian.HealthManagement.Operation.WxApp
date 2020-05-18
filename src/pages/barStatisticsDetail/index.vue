@@ -20,7 +20,10 @@
     </div>
     <div class="result-wrap" v-else>
       <div class="total">
-        <div class="label">总咨询人数：</div>
+        <div class="label">
+          <div v-if="serviceType === 'ask'">总咨询人数：</div>
+          <div v-if="serviceType === 'im'">总活跃人数：</div>
+        </div>
         <div class="count">{{totalCount}}人</div>
       </div>
       <div class="list">
