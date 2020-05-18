@@ -28,7 +28,10 @@
         <div class="theader">
           <div class="tr">
             <div class="th">日期</div>
-            <div class="th">新增建档数</div>
+            <div class="th">
+              <div v-if="serviceType === 'ask'">图文咨询人数</div>
+              <div v-if="serviceType === 'im'">健康顾问活跃人数</div>
+            </div>
           </div>
         </div>
         <div class="tbody" v-if="list.length">

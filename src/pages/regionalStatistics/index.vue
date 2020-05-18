@@ -1,19 +1,19 @@
 <template>
   <div class="page-wrap">
     <div class="list">
-      <div class="item" @click="toDetail('line', 'ask')">
+      <div class="item" @click="toDetail('bar', 'ask')">
         <div>按医生统计图文咨询人数</div>
         <img class="icon" src="/static/images/icon_direct.png" alt="">
       </div>
-      <div class="item" @click="toDetail('line', 'im')">
+      <div class="item" @click="toDetail('bar', 'im')">
         <div>按医生统计健康顾问活跃人数</div>
         <img class="icon" src="/static/images/icon_direct.png" alt="">
       </div>
-      <div class="item" @click="toDetail('bar', 'ask')">
+      <div class="item" @click="toDetail('line', 'ask')">
         <div>日图文咨询人数分析</div>
         <img class="icon" src="/static/images/icon_direct.png" alt="">
       </div>
-      <div class="item" @click="toDetail('bar', 'im')">
+      <div class="item" @click="toDetail('line', 'im')">
         <div>日健康顾问活跃人数分析</div>
         <img class="icon" src="/static/images/icon_direct.png" alt="">
       </div>

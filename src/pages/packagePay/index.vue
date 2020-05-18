@@ -73,7 +73,7 @@ export default {
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
     this.contractParam = wx.getStorageSync('contractParam')
-    // wx.removeStorageSync('contractParam')
+    wx.removeStorageSync('contractParam')
     this.healthRecordId = this.contractParam.healthRecordId
     this.servicePackageId = this.contractParam.servicePackageId
     this.getHeathRecord()

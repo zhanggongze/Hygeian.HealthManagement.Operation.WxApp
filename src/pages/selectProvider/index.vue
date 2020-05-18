@@ -172,7 +172,7 @@ export default {
     selectProvider(data) {
       if(this.isConsume && this.serviceType === 'ConsultByAsk') {
         wx.redirectTo({
-          url: `/pages/illnessDescription/main?doctorID=${data.id}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&name=${this.serviceName}&customerId=${this.customerId}`
+          url: `/pages/illnessDescription/main?isStart=1&doctorID=${data.id}&healthRecordId=${this.healthRecordId}&customerContractId=${this.customerContractId}&customerContractItemId=${this.customerContractItemId}&name=${this.serviceName}&customerId=${this.customerId}`
         })
       } else {
         wx.redirectTo({

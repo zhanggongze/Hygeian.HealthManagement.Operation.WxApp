@@ -125,6 +125,9 @@ export default {
     this.customerContractItemId = options.customerContractItemId
     this.name = options.name
     this.customerId = options.customerId
+    if (options.isStart && parseInt(options.isStart) === 1) {
+      this.illnessDescribe = '本次检查报告已上传，请您及时进行解读。'
+    }
     this.queryDoctorInfo()
     this.getDetail()
   },

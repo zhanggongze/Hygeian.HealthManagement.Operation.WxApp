@@ -12,6 +12,6 @@ export const developConfig = {
   COSSECRETKEY: 'aCZKsCHAsKpBJBxXrwlKgogPt75rOhkX',
   COSBUCKET: 'dev-1300222288',
   COSREGION: 'ap-shanghai',
-  VERSION: '1.0.1.2020051701',
+  VERSION: 'v1.0.2.2020051801',
   SERVIEASKURL: SOURCEAPI + '/service/twzx_intro.png'
 }
