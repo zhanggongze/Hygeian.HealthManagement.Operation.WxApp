@@ -48,9 +48,7 @@ export default {
       } else if(type === 'pdf') {
         this.uploadPdf(mkdir)
       } else if(type === 'dicomurl') {
-        wx.navigateTo({
-          url: '/pages/dicomList/main'
-        })
+        this.$emit('confirmDicom')
       }
     },
     cancel() {

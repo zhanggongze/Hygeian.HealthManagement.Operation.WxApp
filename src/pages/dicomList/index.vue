@@ -3,10 +3,15 @@
     <div class="list" v-if="list.length">
       <div class="item" v-for="(data, index) in list" :key="index" @click="toDetail(data)">
         <div class="info">
-          <div class="name">{{data.eventType.displayName}}</div>
+          <div class="name-tag">
+            <div class="name">{{data.examinationName}}</div>
+            <div class="tag">{{data.category}}</div>
+          </div>
           <div class="content">
-            <div class="lavel">检查日期：{{data.occurrenceDateTime}}</div>
-            <div class="lavel">检查机构：{{data.institution}}</div>
+            <div class="label">检查人：{{data.patientName + '(' + (data.patientGender ? data.patientGender : '') + ' ' + (data.patientAge ? data.patientAge + '岁' : '') + ')'}}</div>
+            <div class="lavel">检查编码：{{data.examinationNo}}</div>
+            <div class="lavel">检查日期：{{data.examinationDateTime}}</div>
+            <div class="lavel">检查机构：{{data.institutionName}}</div>
           </div>
         </div>
       </div>
@@ -15,7 +20,7 @@
       <img class="img" src="/static/images/empty_message.png" alt />
       <div class="p">暂无记录</div>
     </div>
-    <div class="primary-btn add-btn" @click="addDicom">手动添加</div>
+    <!-- <div class="primary-btn add-btn" @click="addDicom">手动添加</div> -->
     <textarea-dialog label="手动添加" placeholder="请输入影像地址" v-model="dicomUrl" :show="showUpload" @close="showUpload=false" @confirm="upload"></textarea-dialog>
   </div>
 </template>
@@ -30,32 +35,30 @@ export default {
       // 卫生事件列表
       list: [],
       showUpload: false,
-      dicomUrl: ''
+      dicomUrl: '',
+      hospitalID: '',
+      name: ''
     }
   },
   onLoad(options) {
     Object.assign(this.$data, this.$options.data())
-  },
-  onShow() {
-    let pages = getCurrentPages();
-    // 上一个页面
-    let curPage = pages[pages.length - 1]
-    if(curPage.data.needRefresh) {
-      delete curPage.data.needRefresh
-      this.queryHealthEvents()
-    }
+    this.hospitalID = options.hospitalID
+    this.name = options.name
+    this.getList()
   },
   methods: {
     /**
-     * 获取卫生事件列表
+     * 搜索一脉影像报告
      */
-    queryHealthEvents() {
+    getList() {
       this.list = []
       this.httpFly.post({
-        healthRecordId: this.healthRecordId
-      }, 'healthRecord/api/v1/partner/queryHealthEvents', res => {
+        name: this.name,
+        locationCode: wx.getStorageSync('activeInfo')['region'],
+        hospitalID: this.hospitalID
+      }, 'servicepackage/api/v1/partner/RimagExaminationResults/QueryExaminationResults', res => {
         this.list = this.list.concat(res.items.map(obj => {
-          obj.occurrenceDateTime = this.utils.formatTime(obj.occurrenceDateTime, 'yyyy-mm-dd')
+          obj.examinationDateTime = this.utils.formatTime(obj.examinationDateTime, 'yyyy-mm-dd')
           return obj
         }))
       })
@@ -67,8 +70,20 @@ export default {
      * 跳转到上传附件界面
      */
     toDetail(data) {
-      wx.navigateTo({
-        url: '/pages/inspectionItemDetail/main?id=' + data.id
+      this.httpFly.post({
+        examinationResultID: data.id
+      }, 'servicepackage/api/v1/partner/RimagExaminationResults/ArchiveExaminationResult', res => {
+        let pages = getCurrentPages();
+        let prevPage = pages[pages.length - 2]
+        prevPage.setData({
+          file: {
+            type: data.category === '影像' ? 'dicomurl' : 'pdf',
+            url: data.url
+          }
+        })
+        wx.navigateBack({
+          delta: 1
+        });
       })
     },
     upload() {
@@ -92,7 +107,7 @@ export default {
 <style lang="scss" scoped>
 .page-wrap {
   box-sizing: border-box;
-  padding-bottom: 130rpx;
+  padding-bottom: 30rpx;
   min-height: 100%;
   background-color: #f5f5f5;
   .list {
@@ -109,8 +124,19 @@ export default {
       }
       .info {
         padding: 30rpx 0 10rpx;
-        .name {
-          font-size: 40rpx;
+        .name-tag {
+          display: flex;
+          justify-content: space-between;
+          .name {
+            flex: 1;
+            font-size: 40rpx;
+          }
+          .tag {
+            margin-left: 30rpx;
+            line-height: 56rpx;
+            font-size: 30rpx;
+            color: #408BF1;
+          }
         }
         .content {
           padding: 20rpx 0 10rpx;
