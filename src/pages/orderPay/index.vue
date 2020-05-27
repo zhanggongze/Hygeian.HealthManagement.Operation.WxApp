@@ -26,6 +26,7 @@
   </div>
 </template>
 <script>
+import { envConfig } from '@/env/index'
 export default {
   data() {
     return {
@@ -79,7 +80,8 @@ export default {
     payment() {
       this.httpFly.post({
         outTradeNo: this.orderId,
-        paymethod: this.paymethod
+        paymethod: this.paymethod,
+        appId: envConfig.APPID
       }, '/order/api/v1/partner/getOrderPayInfo', res => {
         if (res && res.flowno) {
           let flowno = res.flowno

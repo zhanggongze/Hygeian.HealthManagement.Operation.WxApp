@@ -2,7 +2,7 @@ let BASEAPI = 'https://hwcloud.services.pre.hygeian.com.cn/services/'
 let SOURCEAPI = 'https://pre-public-1300222288.cos.ap-chengdu.myqcloud.com/'
 
 export const trialConfig = {
-  APPID: 'wx74b0e2afce9571e3',
+  APPID: 'wxd1f2be28f8da8896',
   API: BASEAPI,
   UPLOADURL: SOURCEAPI,
   CLIENTID: 'Hygeian.HealthManagement.Partner.WxApp',

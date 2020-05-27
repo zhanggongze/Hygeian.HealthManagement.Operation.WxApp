@@ -2,7 +2,7 @@ let BASEAPI = 'https://qcloud.services.dev.hygeian.com.cn/services/'
 let SOURCEAPI = 'https://qcloud.resource.dev.hygeian.com.cn/'
 
 export const developConfig = {
-  APPID: 'wx74b0e2afce9571e3',
+  APPID: 'wxd1f2be28f8da8896',
   API: BASEAPI,
   UPLOADURL: SOURCEAPI,
   CLIENTID: 'Hygeian.HealthManagement.Partner.WxApp',

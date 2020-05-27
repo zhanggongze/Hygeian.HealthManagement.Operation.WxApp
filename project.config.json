@@ -19,7 +19,7 @@
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wx74b0e2afce9571e3",
+	"appid": "wxd1f2be28f8da8896",
 	"projectname": "operation",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
@@ -150,6 +150,26 @@
 					"name": "pages/imResponseDetail/main",
 					"pathName": "pages/imResponseDetail/main",
 					"query": "groupId=c69ea2ed-b5fb-4ce3-ae30-fb7d5db5ea3b",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/cardList/main",
+					"pathName": "pages/cardList/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/cardDetail/main",
+					"pathName": "pages/cardDetail/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/addCard/main",
+					"pathName": "pages/addCard/main",
 					"scene": null
 				}
 			]

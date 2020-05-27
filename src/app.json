@@ -33,7 +33,10 @@
     "pages/responseStatistics/main",
     "pages/askResponse/main",
     "pages/imResponse/main",
-    "pages/imResponseDetail/main"
+    "pages/imResponseDetail/main",
+    "pages/cardList/main",
+    "pages/cardDetail/main",
+    "pages/addCard/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

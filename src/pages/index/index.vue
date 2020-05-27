@@ -69,7 +69,12 @@
             <p>医生响应查询</p>
           </div>
         </div>
-        <div class="c1"></div>
+        <div class="c1">
+          <div class="imgft" @click="navigateTo('/pages/cardList/main')">
+            <img src="/static/images/work_card.png" />
+            <p>渠道发卡</p>
+          </div>
+        </div>
       </div>
     </div>
 
