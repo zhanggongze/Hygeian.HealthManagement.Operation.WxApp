@@ -64,7 +64,8 @@ export default {
       id: '',
       progress: '',
       eventTypeCode: '',
-      eventTypeName: ''
+      eventTypeName: '',
+      institutionID: ''
     }
   },
   onLoad(options) {
@@ -143,9 +144,10 @@ export default {
       this.id = data.id
       this.eventTypeCode = data.eventType.code
       this.eventTypeName = data.eventType.displayName
+      this.institutionID = data.institutionID
       if (data.progress == 400) {
         wx.navigateTo({
-          url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress
+          url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress + '&hospitalID=' + this.institutionID
         })
       } else {
         this.getHealthEventBySource()
@@ -163,7 +165,7 @@ export default {
       }, '/healthrecord/api/v1/partner/getHealthEventBySource', res => {
         this.showDialog = false
         wx.navigateTo({
-          url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress
+          url: '/pages/inspectionItemDetail/main?id=' + this.id + '&contractID=' + this.contractID + '&progress=' + this.progress + '&hospitalID=' + this.institutionID
         })
       }, error => {
         this.showDialog = true

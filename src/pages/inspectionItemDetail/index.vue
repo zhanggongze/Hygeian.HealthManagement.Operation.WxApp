@@ -47,6 +47,7 @@
       :id="healthRecordId"
       @cancel="showUpload=false"
       @confirm="upload"
+      @confirmDicom="confirmDicom"
     ></select-list>
   </div>
 </template>
@@ -83,7 +84,8 @@ export default {
       showUpload: false,
       // 事件ID
       healthEventId: '',
-      type: ''
+      type: '',
+      hospitalID: ''
     }
   },
   onLoad(options) {
@@ -93,6 +95,7 @@ export default {
     this.progress = parseInt(options.progress)
     this.type = options.type
     this.healthEventId = options.healthEventId
+    this.hospitalID = options.hospitalID
     if(this.healthEventId) {
       this.getHealthEvent()
     } else {
@@ -103,13 +106,10 @@ export default {
     let pages = getCurrentPages();
     // 上一个页面
     let curPage = pages[pages.length - 1]
-    if(curPage.data.dicomUrl) {
-      let dicomUrl = curPage.data.dicomUrl
-      delete curPage.data.dicomUrl
-      this.upload({
-        type: 'dicomurl',
-        url: dicomUrl
-      })
+    if(curPage.data.file) {
+      let file = curPage.data.file
+      delete curPage.data.file
+      this.upload(file)
     }
   },
   methods: {
@@ -248,6 +248,11 @@ export default {
         } else {
           this.getDetail()
         }
+      })
+    },
+    confirmDicom() {
+      wx.navigateTo({
+        url: `/pages/dicomList/main?name=${this.patientName}&hospitalID=${this.hospitalID}`
       })
     },
     /**

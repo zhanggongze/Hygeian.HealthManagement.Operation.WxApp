@@ -104,10 +104,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 8,
 					"name": "pages/dicomList/main",
 					"pathName": "pages/dicomList/main",
-					"query": "",
+					"query": "hospitalID=fc230545-4fb5-4496-ae66-d6abdacc1087",
 					"scene": null
 				},
 				{
